@@ -1,6 +1,9 @@
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 import {Button, ButtonGroup, Container, Grid, Typography, useMediaQuery} from "@material-ui/core";
 import {Facebook, Instagram, Store, WhatsApp} from "@material-ui/icons";
+import SavanIcon from "../../components/icons/savan-icon";
+import ShopeeIcon from "../../components/icons/shopee-icon";
+import getConfig from 'next/config'
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -16,6 +19,7 @@ const styles = makeStyles((theme) => ({
 }));
 
 export default function Heading() {
+  const {publicRuntimeConfig} = getConfig();
   const classes = styles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only('xs'));
@@ -37,25 +41,25 @@ export default function Heading() {
         direction="column"
         alignItems={isMobile ? 'flex-start' : isTablet ? 'center' : 'flex-end'}
       >
-        <Typography variant='h5'>pakaian terbaik khusus bayi terbaik</Typography>
+        <Typography variant='h5' component='p'>
+          <TextStrong>Pakaian bayi</TextStrong> bagai teman kecilnya,
+          {' '}
+          <TextStrong>kualitas terbaik</TextStrong> dari sekain yang ada,
+          {' '}
+          <TextStrong>dekat</TextStrong> dan <TextStrong>mudah</TextStrong> dari manapun berada.
+        </Typography>
         {isMobile ? '' : <br/>}
         <br/>
-        <Typography variant='body2'>kunjungi kami di</Typography>
-        <div>
-          <Button variant='contained' color="primary"><Store/> Galeri</Button>
-          <ButtonGroup variant="text" color="secondary" aria-label="text primary button group">
-            <Button>Shopee</Button>
-            <Button>Tokopedia</Button>
-            <Button>Bukalapak</Button>
-          </ButtonGroup>
-        </div>
+        <ButtonGroup>
+          <Button variant='contained' color="primary" startIcon={<SavanIcon />} url={publicRuntimeConfig.url.showcase}> Galeri</Button>
+          <Button variant='outlined' startIcon={<ShopeeIcon />} href={publicRuntimeConfig.url.shopee}> Shopee</Button>
+        </ButtonGroup>
         {isMobile ? '' : <br/>}
         <br/>
-        <Typography variant='body2'>temukan kami di</Typography>
         <ButtonGroup variant="text" color="secondary" aria-label="text primary button group">
-          <Button><Facebook/></Button>
-          <Button><WhatsApp/></Button>
-          <Button><Instagram/></Button>
+          <Button href={publicRuntimeConfig.url.facebook}><Facebook/></Button>
+          <Button href={publicRuntimeConfig.url.whatsapp}><WhatsApp/></Button>
+          <Button href={publicRuntimeConfig.url.instagram}><Instagram/></Button>
         </ButtonGroup>
       </Grid>
       <Grid item xs={12} sm={12} md={6}
@@ -68,4 +72,9 @@ export default function Heading() {
 
     </Grid>
   )
+}
+
+function TextStrong({children}) {
+  const theme = useTheme();
+  return <strong style={{color: theme.palette.primary.main, WebkitTextStroke: '0.35px black'}}>{children}</strong>
 }

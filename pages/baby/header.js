@@ -1,15 +1,30 @@
-import {AppBar, Container, Toolbar, IconButton, Typography, InputBase} from '@material-ui/core'
+import {
+  AppBar,
+  Container,
+  Divider,
+  Drawer,
+  Hidden,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  SvgIcon,
+  Toolbar,
+  Tooltip,
+  Typography,
+  InputBase,
+} from '@material-ui/core'
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-
-export default function Header() {
-  return (
-    <>
-      <MyAppBar/>
-    </>
-  )
-}
+import StoreIcon from '@material-ui/icons/Store';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
+import {useState} from "react";
+import SavanIcon from "../../components/icons/savan-icon";
+import ShopeeIcon from "../../components/icons/shopee-icon";
+import HandshakeIcon from "../../components/icons/handshake-icon";
+import getConfig from "next/dist/next-server/lib/runtime-config";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,22 +82,55 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-function MyAppBar() {
+export default function Header() {
+  const {publicRuntimeConfig} = getConfig();
+
   const classes = useStyles();
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color='transparent'>
         <Container>
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
-            >
-              <MenuIcon/>
-            </IconButton>
+            <Hidden smUp>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => setDrawerIsOpen(true)}
+              >
+                <MenuIcon/>
+              </IconButton>
+              <Drawer anchor='top' open={drawerIsOpen} onClose={() => setDrawerIsOpen(false)}>
+                <List>
+                  <ListItemLink href={publicRuntimeConfig.url.showcase}>
+                    <ListItemIcon>
+                      <SavanIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary='Galeri Savan'/>
+                  </ListItemLink>
+                  <ListItemLink href={publicRuntimeConfig.url.shopee}>
+                    <ListItemIcon>
+                      <ShopeeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Shopee store'/>
+                  </ListItemLink>
+                  <Divider/>
+                  <ListItemLink href={publicRuntimeConfig.url.infoPartnership}>
+                    <ListItemIcon>
+                      <HandshakeIcon color='action' />
+                    </ListItemIcon>
+                    <ListItemText primary='Kerja Sama'/>
+                  </ListItemLink>
+                  <ListItemLink href={publicRuntimeConfig.url.infoGeneral}>
+                    <ListItemIcon><                      ContactSupportIcon /></ListItemIcon>
+                    <ListItemText>Informasi Umum</ListItemText>
+                  </ListItemLink>
+                </List>
+              </Drawer>
+            </Hidden>
             <Typography className={classes.title} variant="h6" noWrap>
               Savan Baby W
             </Typography>
@@ -99,9 +147,35 @@ function MyAppBar() {
                 inputProps={{'aria-label': 'search'}}
               />
             </div>
+            <Hidden xsDown>
+              <Tooltip title='Buka Galeri Savan'>
+                <IconButton href={publicRuntimeConfig.url.showcase}>
+                  <SavanIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Menuju toko Shopee kami'>
+                <IconButton href={publicRuntimeConfig.url.shopee}>
+                  <ShopeeIcon/>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Informasi Kerja Sama'>
+                <IconButton href={publicRuntimeConfig.url.infoPartnership}>
+                  <HandshakeIcon/>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Informasi Umum dan Lainya'>
+                <IconButton href={publicRuntimeConfig.url.infoGeneral}>
+                  <ContactSupportIcon/>
+                </IconButton>
+              </Tooltip>
+            </Hidden>
           </Toolbar>
         </Container>
       </AppBar>
     </div>
-  );
+);
+}
+
+function ListItemLink(props) {
+  return <ListItem button component="a" {...props} />;
 }
