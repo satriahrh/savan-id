@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 
 const styles = makeStyles((theme) => ({
   root: {
-    margin: '0.6rem',
+    margin: '16px',
   },
   contentName: {
     overflow: 'hidden',

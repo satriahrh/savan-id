@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Header from "./header";
 import Content from "./content";
+import Footer from "./footer";
 // import Footer from "./footer";
 
 export default function Baby() {
@@ -13,7 +14,7 @@ export default function Baby() {
 
       <Header />
       <Content />
-      {/*<Footer />*/}
+      <Footer />
     </>
   )
 }

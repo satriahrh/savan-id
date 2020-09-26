@@ -1,17 +1,28 @@
-import styles from "../../styles/Baby.module.css";
-import {Footer as Base} from "rsuite";
+import {colors, Container, Link, Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 
+const styles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: colors.grey["800"],
+    marginTop: '16px',
+    paddingTop: '16px',
+    paddingBottom: '16px'
+  },
+  body: {
+    color: colors.grey["50"]
+  }
+
+}));
 export default function Footer() {
+  const classes = styles();
   return (
-    <Base>
-      <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by{' '}
-        <img src="/savan-baby-w.svg" alt="Savan Baby W Logo" className={styles.logo} />
-      </a>
-    </Base>
+    <div className={classes.root}>
+      <Container>
+        <Typography variant='body2' align='center' className={classes.body}>
+          powered by <Link href='https://satriahrh.github.io'>satriahrh.github.com</Link>
+        </Typography>
+      </Container>
+    </div>
+
   )
 }
