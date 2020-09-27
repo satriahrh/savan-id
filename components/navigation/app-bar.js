@@ -15,10 +15,9 @@ import {
   Typography,
   InputBase,
 } from '@material-ui/core'
-import {fade, makeStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import StoreIcon from '@material-ui/icons/Store';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import {useState} from "react";
 import SavanIcon from "../../components/icons/savan-icon";
@@ -82,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-export default function Header() {
+export default function NavigationAppBar() {
   const {publicRuntimeConfig} = getConfig();
 
   const classes = useStyles();
@@ -173,7 +172,7 @@ export default function Header() {
         </Container>
       </AppBar>
     </div>
-);
+  );
 }
 
 function ListItemLink(props) {
