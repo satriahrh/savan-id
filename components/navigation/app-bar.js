@@ -33,6 +33,7 @@ import Link from 'next/link'
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
+      minHeight: '64px',
     },
     menuButton: {
       marginRight: theme.spacing(2),

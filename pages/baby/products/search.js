@@ -41,7 +41,6 @@ export default function Index() {
 const styles = makeStyles((theme) => ({
   searchResultRoot: {
     minHeight: '100vh',
-    paddingTop: '64px',
   }
 }));
 
