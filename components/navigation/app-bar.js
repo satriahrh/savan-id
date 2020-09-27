@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   Container,
   Divider,
   Drawer,
@@ -16,6 +17,7 @@ import {
   InputBase,
 } from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
+import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
@@ -24,6 +26,9 @@ import SavanIcon from "../../components/icons/savan-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import HandshakeIcon from "../../components/icons/handshake-icon";
 import getConfig from "next/dist/next-server/lib/runtime-config";
+import search from "../../pages/baby/products/search";
+import {useRouter} from "next/router";
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -81,15 +86,20 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-export default function NavigationAppBar() {
+export default function NavigationAppBar({searchKeyword}) {
+  const [searchQ, setSearchQ] = useState(searchKeyword);
   const {publicRuntimeConfig} = getConfig();
+  const router = useRouter();
+  NavigationAppBar.getInitialProps = ({query}) => {
+    return {query}
+  };
 
   const classes = useStyles();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color='transparent'>
+      <AppBar position="fixed" color='default'>
         <Container>
           <Toolbar>
             <Hidden smUp>
@@ -104,36 +114,55 @@ export default function NavigationAppBar() {
               </IconButton>
               <Drawer anchor='top' open={drawerIsOpen} onClose={() => setDrawerIsOpen(false)}>
                 <List>
-                  <ListItemLink href={publicRuntimeConfig.url.showcase}>
-                    <ListItemIcon>
-                      <SavanIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary='Galeri Savan'/>
-                  </ListItemLink>
-                  <ListItemLink href={publicRuntimeConfig.url.shopee}>
-                    <ListItemIcon>
-                      <ShopeeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary='Shopee store'/>
-                  </ListItemLink>
+                  <Link href='/baby' passHref>
+                    <ListItemLink>
+                      <ListItemIcon>
+                        <SavanIcon/>
+                      </ListItemIcon>
+                      <ListItemText primary='Beranda'/>
+                    </ListItemLink>
+                  </Link>
+                  <Link href={publicRuntimeConfig.url.shopee} passHref>
+                    <ListItemLink>
+                      <ListItemIcon>
+                        <ShopeeIcon/>
+                      </ListItemIcon>
+                      <ListItemText primary='Shopee store'/>
+                    </ListItemLink>
+                  </Link>
                   <Divider/>
-                  <ListItemLink href={publicRuntimeConfig.url.infoPartnership}>
-                    <ListItemIcon>
-                      <HandshakeIcon color='action' />
-                    </ListItemIcon>
-                    <ListItemText primary='Kerja Sama'/>
-                  </ListItemLink>
-                  <ListItemLink href={publicRuntimeConfig.url.infoGeneral}>
-                    <ListItemIcon><                      ContactSupportIcon /></ListItemIcon>
-                    <ListItemText>Informasi Umum</ListItemText>
-                  </ListItemLink>
+                  <Link href={publicRuntimeConfig.url.infoPartnership} passHref>
+                    <ListItemLink>
+                      <ListItemIcon>
+                        <HandshakeIcon color='action'/>
+                      </ListItemIcon>
+                      <ListItemText primary='Kerja Sama'/>
+                    </ListItemLink>
+                  </Link>
+                  <Link href={publicRuntimeConfig.url.infoGeneral} passHref>
+                    <ListItemLink>
+                      <ListItemIcon><                      ContactSupportIcon/></ListItemIcon>
+                      <ListItemText>Informasi Umum</ListItemText>
+                    </ListItemLink>
+                  </Link>
                 </List>
               </Drawer>
             </Hidden>
-            <Typography className={classes.title} variant="h6" noWrap>
-              Savan Baby W
-            </Typography>
-            <div className={classes.search}>
+            <Hidden xsDown>
+              <IconButton edge='start' onClick={() => {
+                router.push('/baby')
+              }}>
+                <SavanIcon/>
+              </IconButton>
+              <Typography className={classes.title} variant="h6" noWrap component='a'>
+                Savan Baby W
+              </Typography>
+            </Hidden>
+            <form className={classes.search} onSubmit={(e) => {
+              console.log(e);
+              router.push(`${publicRuntimeConfig.url.showcase}?q=${searchQ}`);
+              e.preventDefault()
+            }}>
               <div className={classes.searchIcon}>
                 <SearchIcon/>
               </div>
@@ -144,14 +173,13 @@ export default function NavigationAppBar() {
                   input: classes.inputInput,
                 }}
                 inputProps={{'aria-label': 'search'}}
+                value={searchQ}
+                onChange={(e) => {
+                  setSearchQ(e.target.value)
+                }}
               />
-            </div>
+            </form>
             <Hidden xsDown>
-              <Tooltip title='Buka Galeri Savan'>
-                <IconButton href={publicRuntimeConfig.url.showcase}>
-                  <SavanIcon />
-                </IconButton>
-              </Tooltip>
               <Tooltip title='Menuju toko Shopee kami'>
                 <IconButton href={publicRuntimeConfig.url.shopee}>
                   <ShopeeIcon/>
@@ -177,4 +205,8 @@ export default function NavigationAppBar() {
 
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
+}
+
+function onSubmitSearch() {
+
 }

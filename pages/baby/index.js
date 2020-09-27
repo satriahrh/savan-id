@@ -9,13 +9,14 @@ import ShopeeIcon from "../../components/icons/shopee-icon";
 import {Facebook, Instagram, WhatsApp} from "@material-ui/icons";
 import Carousel from "react-multi-carousel";
 import {default as ProductCarousel} from "../../components/products/carousel";
+import Link from "next/link";
 
 export default function Baby() {
   return (
     <>
       <Head>
         <title>Toko Bayi</title>
-        <link rel="icon" href="/favicon.ico"/>
+        <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar/>
       <Heading/>
@@ -97,8 +98,9 @@ function Heading() {
         {isMobile ? '' : <br/>}
         <br/>
         <ButtonGroup>
-          <Button variant='contained' color="primary" startIcon={<SavanIcon/>}
-                  url={publicRuntimeConfig.url.showcase}> Galeri</Button>
+          <Link href={publicRuntimeConfig.url.showcase} passHref>
+            <Button variant='contained' color="primary" startIcon={<SavanIcon/>} component='a'> Galeri</Button>
+          </Link>
           <Button variant='outlined' startIcon={<ShopeeIcon/>} href={publicRuntimeConfig.url.shopee}> Shopee</Button>
         </ButtonGroup>
         {isMobile ? '' : <br/>}
