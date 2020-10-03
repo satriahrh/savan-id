@@ -98,7 +98,7 @@ function Heading() {
         {isMobile ? '' : <br/>}
         <br/>
         <ButtonGroup>
-          <Link href={publicRuntimeConfig.url.showcase} passHref>
+          <Link href={publicRuntimeConfig.url.search} passHref>
             <Button variant='contained' color="primary" startIcon={<SavanIcon/>} component='a'> Galeri</Button>
           </Link>
           <Button variant='outlined' startIcon={<ShopeeIcon/>} href={publicRuntimeConfig.url.shopee}> Shopee</Button>

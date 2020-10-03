@@ -1,9 +1,9 @@
-import Footer from "../../../components/navigation/footer";
+import Footer from "../../components/navigation/footer";
 import Head from "next/dist/next-server/lib/head";
-import NavigationAppBar from "../../../components/navigation/app-bar";
+import NavigationAppBar from "../../components/navigation/app-bar";
 import {useRouter} from "next/router";
 import {Container, Grid} from "@material-ui/core";
-import Item from "../../../components/products/item";
+import Item from "../../components/products/item";
 import {makeStyles} from "@material-ui/core/styles";
 
 export default function Index() {

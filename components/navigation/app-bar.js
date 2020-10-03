@@ -26,7 +26,7 @@ import SavanIcon from "../../components/icons/savan-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import HandshakeIcon from "../../components/icons/handshake-icon";
 import getConfig from "next/dist/next-server/lib/runtime-config";
-import search from "../../pages/baby/products/search";
+import search from "../../pages/baby/search";
 import {useRouter} from "next/router";
 import Link from 'next/link'
 
@@ -161,7 +161,7 @@ export default function NavigationAppBar({searchKeyword}) {
             </Hidden>
             <form className={classes.search} onSubmit={(e) => {
               console.log(e);
-              router.push(`${publicRuntimeConfig.url.showcase}?q=${searchQ}`);
+              router.push(`${publicRuntimeConfig.url.search}?q=${searchQ}`);
               e.preventDefault()
             }}>
               <div className={classes.searchIcon}>
