@@ -8,7 +8,7 @@ export default function Carousel({products}) {
   const responsive = {
     mobile: {
       breakpoint: {min: theme.breakpoints.values.xs, max: theme.breakpoints.values.sm},
-      items: 2,
+      items: 1,
       slidesToSlide: 1 // optional, default to 1.
     },
     tablet: {

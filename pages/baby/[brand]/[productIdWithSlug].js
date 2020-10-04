@@ -26,11 +26,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ShopeeIcon from "../../../components/icons/shopee-icon";
 
 import NavigationAppBar from "../../../components/navigation/app-bar";
+import {default as RelatedProductsCarousel} from "../../../components/products/carousel";
 import {makeStyles} from "@material-ui/core/styles";
 
 export default function Index() {
   const router = useRouter();
-  const id = getIdFromSlug(router.query.idWithSlug);
+  const id = getIdFromSlug(router.query.productIdWithSlug);
   Index.getInitialProps = ({query}) => {
     return {query}
   };
@@ -56,6 +57,7 @@ export default function Index() {
       </Head>
       <NavigationAppBar/>
       {productDetail}
+      <RelatedProducts/>
     </>
   )
 }
@@ -214,6 +216,28 @@ function Description({descriptions}) {
   ))}</div>
 }
 
+function RelatedProducts({productId}) {
+  const classes = styles();
+  const [relatedProduct, setRelatedProduct] = useState({loading: true});
+
+  if (relatedProduct.loading) {
+    getRelatedProducts(productId).then((result) => {setRelatedProduct({
+      loading: false,
+      data: result,
+    })});
+    return <div />
+  }
+
+  return (
+    <Container className={classes.relatedProductsRoot}>
+      <Typography variant='h6' gutterBottom>Produk terkait</Typography>
+      <div className={classes.relatedProductsCarousel}>
+        <RelatedProductsCarousel products={relatedProduct.data}/>
+      </div>
+    </Container>
+  )
+}
+
 const styles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(6),
@@ -273,6 +297,19 @@ const styles = makeStyles((theme) => ({
   },
   detailDescriptions: {
     paddingTop: theme.spacing(1),
+  },
+  relatedProductsRoot: {
+    marginTop: theme.spacing(3),
+  },
+  relatedProductsCarousel: {
+    [theme.breakpoints.only('xs')]: {
+      marginRight: '-16px',
+      marginLeft: '-16px',
+    },
+    [theme.breakpoints.only('sm')]: {
+      marginRight: '-24px',
+      marginLeft: '-24px',
+    }
   }
 }));
 
@@ -357,4 +394,46 @@ async function getProduct(id) {
       3: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
     }
   }
+}
+
+async function getRelatedProducts(id) {
+  return [
+    'Sleep Suit Abu',
+    'Celana Panjang Rib Abu',
+    'Celana Panjang Pop Abu',
+    'Celana Pendek Pop Abu',
+    'Celana Segitiga Pop Abu',
+    'Baju Oblong Pop Abu',
+    'Baju Oblong Pendek Abu',
+    'Baju Oblong Bis Abu',
+    'Jumper Kutung Abu',
+    'Jumper Pendek Abu',
+    'Jumper Nahkoda Abu',
+  ].map((name, i) => (
+    {
+      id: i,
+      name: name,
+      sizes: ['s', 'm'],
+      brand: {
+        name: 'Savan',
+        color: '#FFD770',
+      },
+      price: 21300,
+      thumbnailUrl: `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=${name}`,
+      variants: {
+        Putih: {
+          sampleColorIcoUrl: 'http://google.com/a.jpg',
+          sampleUrl: 'http://google.com/a.jpg',
+        },
+        Polos: {
+          sampleColorIcoUrl: 'http://google.com/a.jpg',
+          sampleUrl: 'http://google.com/a.jpg',
+        },
+      },
+      shopeeUrlSizes: {
+        s: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
+        m: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490'
+      }
+    }
+  ))
 }
