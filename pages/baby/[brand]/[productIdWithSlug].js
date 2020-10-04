@@ -414,6 +414,7 @@ async function getRelatedProducts(id) {
   ].map((name, i) => (
     {
       id: i,
+      slug: `/savan/${i}-sleep-suit-abu`,
       name: name,
       sizes: ['s', 'm'],
       brand: {

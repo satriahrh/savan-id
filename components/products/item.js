@@ -1,5 +1,6 @@
-import {Card, CardMedia, CardContent, Chip, Divider, Typography} from "@material-ui/core";
+import {Card, CardActionArea, CardMedia, CardContent, Chip, Divider, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import {useRouter} from "next/router";
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -17,10 +18,16 @@ const styles = makeStyles((theme) => ({
 
 export default function Item({product}) {
   const classes = styles();
+  const router = useRouter();
   return (
     <Card className={classes.root}
           raised
     >
+      <CardActionArea
+        onClick={() => {
+          router.push(`/baby${product.slug}`)
+        }}
+      >
       <CardMedia
         component='img'
         image={product.thumbnailUrl}
@@ -38,6 +45,7 @@ export default function Item({product}) {
         </div>
 
       </CardContent>
+      </CardActionArea>
     </Card>
   )
 }

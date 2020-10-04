@@ -177,6 +177,7 @@ const products = [
 ].map((name, i) => (
   {
     id: i,
+    slug: `/savan/${i}-sleep-suit-abu`,
     name: name,
     sizes: ['s', 'm'],
     brand: {
