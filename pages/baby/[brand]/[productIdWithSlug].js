@@ -28,6 +28,7 @@ import ShopeeIcon from "../../../components/icons/shopee-icon";
 import NavigationAppBar from "../../../components/navigation/app-bar";
 import {default as RelatedProductsCarousel} from "../../../components/products/carousel";
 import {makeStyles} from "@material-ui/core/styles";
+import Footer from "../../../components/navigation/footer";
 
 export default function Index() {
   const router = useRouter();
@@ -58,6 +59,7 @@ export default function Index() {
       <NavigationAppBar/>
       {productDetail}
       <RelatedProducts/>
+      <Footer/>
     </>
   )
 }
