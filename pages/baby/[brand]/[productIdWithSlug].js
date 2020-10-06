@@ -69,7 +69,9 @@ function ProductDetail({productDetail}) {
   const theme = useTheme();
   const [selectedVariant, setSelectedVariant] = useState(Object.keys(productDetail.variants)[0]);
   const handleVariantChange = (event, newVariant) => {
-    setSelectedVariant(newVariant)
+    if (newVariant) {
+      setSelectedVariant(newVariant);
+    }
   };
 
   const [selectedSize, setSelectedSize] = useState();
