@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 );
 
 export default function NavigationAppBar({givenFilter}) {
-  const [filter, setFilter] = useState(Object.assign({q: ''}));
+  const [filter, setFilter] = useState({q: ''});
   const {publicRuntimeConfig} = getConfig();
   const router = useRouter();
   NavigationAppBar.getInitialProps = ({query}) => {
@@ -99,7 +99,7 @@ export default function NavigationAppBar({givenFilter}) {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   useEffect(() => {
-    if (filter !== givenFilter) {
+    if (givenFilter && filter !== givenFilter) {
       setFilter(givenFilter)
     }
   }, [givenFilter, setFilter]);
