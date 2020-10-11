@@ -21,7 +21,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SavanIcon from "../../components/icons/savan-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import HandshakeIcon from "../../components/icons/handshake-icon";
@@ -87,8 +87,8 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-export default function NavigationAppBar({searchKeyword}) {
-  const [searchQ, setSearchQ] = useState(searchKeyword);
+export default function NavigationAppBar({givenFilter}) {
+  const [filter, setFilter] = useState(Object.assign({q: ''}));
   const {publicRuntimeConfig} = getConfig();
   const router = useRouter();
   NavigationAppBar.getInitialProps = ({query}) => {
@@ -97,6 +97,12 @@ export default function NavigationAppBar({searchKeyword}) {
 
   const classes = useStyles();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (filter !== givenFilter) {
+      setFilter(givenFilter)
+    }
+  }, [givenFilter, setFilter]);
 
   return (
     <div className={classes.root}>
@@ -160,8 +166,10 @@ export default function NavigationAppBar({searchKeyword}) {
               </Typography>
             </Hidden>
             <form className={classes.search} onSubmit={(e) => {
-              console.log(e);
-              router.push(`${publicRuntimeConfig.url.search}?q=${searchQ}`);
+              router.push({
+                pathname: `${publicRuntimeConfig.url.search}`,
+                query: filter
+              });
               e.preventDefault()
             }}>
               <div className={classes.searchIcon}>
@@ -174,9 +182,13 @@ export default function NavigationAppBar({searchKeyword}) {
                   input: classes.inputInput,
                 }}
                 inputProps={{'aria-label': 'search'}}
-                value={searchQ}
+                value={filter.q}
                 onChange={(e) => {
-                  setSearchQ(e.target.value)
+                  e.persist();
+                  setFilter((prevFilter) => ({
+                    ...prevFilter,
+                    q: e.target.value,
+                  }))
                 }}
               />
             </form>
