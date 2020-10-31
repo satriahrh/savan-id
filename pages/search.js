@@ -1,6 +1,6 @@
-import Footer from "../../components/navigation/footer";
+import Footer from "../components/navigation/footer";
 import Head from "next/dist/next-server/lib/head";
-import NavigationAppBar from "../../components/navigation/app-bar";
+import NavigationAppBar from "../components/navigation/app-bar";
 import {useRouter} from "next/router";
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 import {
   Pagination
 } from "@material-ui/lab";
-import Item from "../../components/products/item";
+import Item from "../components/products/item";
 import {makeStyles} from "@material-ui/core/styles";
 import {useEffect, useState} from "react";
 import TuneIcon from '@material-ui/icons/Tune';

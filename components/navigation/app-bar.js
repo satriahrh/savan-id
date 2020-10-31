@@ -26,7 +26,7 @@ import SavanIcon from "../../components/icons/savan-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import HandshakeIcon from "../../components/icons/handshake-icon";
 import getConfig from "next/dist/next-server/lib/runtime-config";
-import search from "../../pages/baby/search";
+import search from "../../pages/search";
 import {useRouter} from "next/router";
 import Link from 'next/link'
 
