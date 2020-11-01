@@ -4,7 +4,7 @@ import NavigationAppBar from "../../components/navigation/app-bar";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {Button, ButtonGroup, Container, Grid, Typography, useMediaQuery} from "@material-ui/core";
-import SavanIcon from "../../components/icons/savan-icon";
+import SavanBabyIcon from "../../components/icons/savan-baby-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import {Facebook, Instagram, WhatsApp} from "@material-ui/icons";
 import Carousel from "react-multi-carousel";
@@ -99,7 +99,7 @@ function Heading() {
         <br/>
         <ButtonGroup>
           <Link href={publicRuntimeConfig.url.search + '?q='} passHref>
-            <Button variant='contained' color="primary" startIcon={<SavanIcon/>} component='a'> Galeri</Button>
+            <Button variant='contained' color="primary" startIcon={<SavanBabyIcon/>} component='a'> Galeri</Button>
           </Link>
           <Button variant='outlined' startIcon={<ShopeeIcon/>} href={publicRuntimeConfig.url.shopee}> Shopee</Button>
         </ButtonGroup>

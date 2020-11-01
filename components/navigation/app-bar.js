@@ -22,7 +22,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import {useEffect, useState} from "react";
-import SavanIcon from "../../components/icons/savan-icon";
+import SavanBabyIcon from "../../components/icons/savan-baby-icon";
 import ShopeeIcon from "../../components/icons/shopee-icon";
 import HandshakeIcon from "../../components/icons/handshake-icon";
 import getConfig from "next/dist/next-server/lib/runtime-config";
@@ -124,7 +124,7 @@ export default function NavigationAppBar({givenFilter}) {
                   <Link href='/baby' passHref>
                     <ListItemLink>
                       <ListItemIcon>
-                        <SavanIcon/>
+                        <SavanBabyIcon/>
                       </ListItemIcon>
                       <ListItemText primary='Beranda'/>
                     </ListItemLink>
@@ -159,7 +159,7 @@ export default function NavigationAppBar({givenFilter}) {
               <IconButton edge='start' onClick={() => {
                 router.push('/baby')
               }}>
-                <SavanIcon/>
+                <SavanBabyIcon/>
               </IconButton>
               <Typography className={classes.title} variant="h6" noWrap component='a'>
                 Savan Baby W
