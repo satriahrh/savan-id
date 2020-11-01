@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from "next/link";
 import {
   Card,
   CardActionArea,
@@ -66,21 +67,20 @@ function SiteCarousel() {
       <Typography align='center' variant='h5'>usaha kami untuk anak cucu</Typography>
       <Grid container>
         {publicRuntimeConfig.sites.map((site, i) => (
-          <Grid item
-                xs={12} sm={6} key={i} component={Card}
-                raised className={classes.root}
+          <Grid item xs={12} sm={6} key={i}
           >
+            <Card raised className={classes.root}>
               <CardActionArea
-                onClick={() => {
-                  router.push(site.path)
-                }}
+                href={site.path}
+                as={Link}
               >
                 <CardContent>
                   <Typography variant='h4'>{site.title}</Typography>
-                  <Divider />
+                  <Divider/>
                   <Typography variant='body1'>{site.description}</Typography>
                 </CardContent>
               </CardActionArea>
+            </Card>
           </Grid>
         ))}
       </Grid>

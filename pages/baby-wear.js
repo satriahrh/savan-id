@@ -29,7 +29,7 @@ export default function Index() {
       </Typography>
       <Divider />
       <Typography>Jelajahi bisnis kami yang lain di</Typography>
-      <Button variant='outlined'>beranda</Button>
+      <Button variant='outlined' href='/' as={Link}>beranda</Button>
     </div>
   )
 }
