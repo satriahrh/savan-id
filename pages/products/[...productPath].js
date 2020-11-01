@@ -23,29 +23,32 @@ import Head from "next/dist/next-server/lib/head";
 import {useState} from "react";
 import Carousel from "react-multi-carousel";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ShopeeIcon from "../../../components/icons/shopee-icon";
+import ShopeeIcon from "../../components/icons/shopee-icon";
 
-import NavigationAppBar from "../../../components/navigation/app-bar";
-import {default as RelatedProductsCarousel} from "../../../components/products/carousel";
+import NavigationAppBar from "../../components/navigation/app-bar";
+import {default as RelatedProductsCarousel} from "../../components/products/carousel";
 import {makeStyles} from "@material-ui/core/styles";
-import Footer from "../../../components/navigation/footer";
+import Footer from "../../components/navigation/footer";
 
 export default function Index() {
   const router = useRouter();
-  const id = getIdFromSlug(router.query.productIdWithSlug);
   Index.getInitialProps = ({query}) => {
     return {query}
   };
+  const productId = getIdFromProductPath(router.query.productPath);
 
   const [product, setProduct] = useState({loading: true});
   let productDetail = <h1>Tunggu Ya</h1>
   if (product.loading) {
-    getProduct(id).then((product) => {
-      setProduct({
-        loading: false,
-        detail: product
-      })
-    });
+    if (productId) {
+      getProduct(productId).then((product) => {
+        console.log(productId);
+        setProduct({
+          loading: false,
+          detail: product
+        })
+      });
+    }
   } else {
     productDetail = <ProductDetail productDetail={product.detail}/>
   }
@@ -118,8 +121,8 @@ function ProductDetail({productDetail}) {
         <div className={classes.detailVariant}>
           <span className={classes.detailVariantSelected}>Varian</span>
           <ToggleButtonGroup exclusive value={selectedVariant} onChange={handleVariantChange}>
-            {productDetail ? Object.keys(productDetail.variants).map((variant) => (
-              <ToggleButton size='small' value={variant}>
+            {productDetail ? Object.keys(productDetail.variants).map((variant, i) => (
+              <ToggleButton key={i} size='small' value={variant}>
                 {variant}
               </ToggleButton>
             )) : ''}
@@ -128,8 +131,8 @@ function ProductDetail({productDetail}) {
         <div className={classes.detailSize}>
           <span className={classes.detailSizeSelected}>Ukuran</span>
           <ToggleButtonGroup exclusive value={selectedSize} onChange={handleSizeChange}>
-            {productDetail ? productDetail.sizes.map((size) => (
-              <ToggleButton size='small' value={size}>
+            {productDetail ? productDetail.sizes.map((size, i) => (
+              <ToggleButton key={i} size='small' value={size}>
                 {size}
               </ToggleButton>
             )) : ''}
@@ -143,7 +146,6 @@ function ProductDetail({productDetail}) {
                   variant='outlined'
                   size='large'
                   onClick={() => {
-                    console.log(selectedSize)
                     if (selectedSize) {
                       window.open(productDetail.shopeeUrlSizes[selectedSize])
                     } else {
@@ -209,8 +211,8 @@ function Description({descriptions}) {
 
   return <div
     className={classes.detailDescriptions}
-  >{descriptions.map((description) => (
-    <Accordion square elevation={0}
+  >{descriptions.map((description, i) => (
+    <Accordion key={i} square elevation={0}
                expanded={expanded === description.summary}
                onChange={handleChange(description.summary)}
     >
@@ -317,15 +319,8 @@ const styles = makeStyles((theme) => ({
   }
 }));
 
-function getIdFromSlug(slug) {
-  let ret = "";
-  for (let i = 0; i < slug?.length; i++) {
-    if (slug[i] === '-') {
-      break
-    }
-    ret += slug[i]
-  }
-  return ret
+function getIdFromProductPath(productPath) {
+  return productPath ? productPath[1] : undefined
 }
 
 async function getProduct(id) {
@@ -416,7 +411,7 @@ async function getRelatedProducts(id) {
   ].map((name, i) => (
     {
       id: i,
-      slug: `/savan/${i}-sleep-suit-abu`,
+      slug: `sleep-suit-abu`,
       name: name,
       sizes: ['s', 'm'],
       brand: {

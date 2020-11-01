@@ -25,7 +25,7 @@ export default function Item({product}) {
     >
       <CardActionArea
         onClick={() => {
-          router.push(`/baby${product.slug}`)
+          router.push(`/products/${product.brand.code}/${product.id}/${product.slug}`)
         }}
       >
       <CardMedia

@@ -1,14 +1,14 @@
 import Head from 'next/head'
-import Footer from "../../components/navigation/footer";
-import NavigationAppBar from "../../components/navigation/app-bar";
+import Footer from "../components/navigation/footer";
+import NavigationAppBar from "../components/navigation/app-bar";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {Button, ButtonGroup, Container, Grid, Typography, useMediaQuery} from "@material-ui/core";
-import SavanBabyIcon from "../../components/icons/savan-baby-icon";
-import ShopeeIcon from "../../components/icons/shopee-icon";
+import SavanBabyIcon from "../components/icons/savan-baby-icon";
+import ShopeeIcon from "../components/icons/shopee-icon";
 import {Facebook, Instagram, WhatsApp} from "@material-ui/icons";
 import Carousel from "react-multi-carousel";
-import {default as ProductCarousel} from "../../components/products/carousel";
+import {default as ProductCarousel} from "../components/products/carousel";
 import Link from "next/link";
 
 export default function Baby() {
@@ -177,10 +177,11 @@ const products = [
 ].map((name, i) => (
   {
     id: i,
-    slug: `/savan/${i}-sleep-suit-abu`,
+    slug: `sleep-suit-abu`,
     name: name,
     sizes: ['s', 'm'],
     brand: {
+      code: 'savan',
       name: 'Savan',
       color: '#FFD770',
     },
