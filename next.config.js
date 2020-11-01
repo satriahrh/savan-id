@@ -12,7 +12,18 @@ module.exports = {
     },
     copy: {
       authorSite: 'satriahrh.github.io'
-    }
+    },
+    sites: [
+      {
+        title: 'Baby Store',
+        description: 'Tempat belanja segala kebutuhan bayi dari brand-brand ternama, kualitas terbaik, harga terjangkau.',
+        path: '/baby-store',
+      },
+      {
+        title: 'Baby Wear',
+        description: 'Brand kebutuhan bayi mulai dari baju, celana, kaos, jumper, sleepsuit, sarung tangan, dll.',
+        path: '/baby-wear',
+      },
+    ],
   },
-
 };
