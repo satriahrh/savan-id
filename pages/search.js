@@ -124,7 +124,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>Toko Bayi | Pencarian {router.query.q}</title>
+        <title>{router.query.q + ' | Pencarian Produk Savan'}</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar givenFilter={filter}/>

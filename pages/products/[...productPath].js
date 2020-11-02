@@ -56,7 +56,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>Toko Bayi {product.loading ? '' : ' | ' + product.detail.name}</title>
+        <title>{product.loading ? '' : product.detail.name + ' | Produk Savan'}</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar/>

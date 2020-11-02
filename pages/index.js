@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SAVAN | usaha kami untuk anak cucu</title>
+        <title>Savan - usaha kami untuk anak cucu</title>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 

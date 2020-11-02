@@ -15,7 +15,7 @@ export default function Baby() {
   return (
     <>
       <Head>
-        <title>Toko Bayi</title>
+        <title>Savan Baby Store - toko pakaian bayi lengkap</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar/>
