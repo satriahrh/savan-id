@@ -15,7 +15,7 @@ export default function Baby() {
   return (
     <>
       <Head>
-        <title>Savan Baby Store - toko pakaian bayi lengkap</title>
+        <title>Savan Baby Store - toko kebutuhan pakaian bayi lengkap</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar/>
@@ -98,7 +98,7 @@ function Heading() {
         {isMobile ? '' : <br/>}
         <br/>
         <ButtonGroup>
-          <Link href={publicRuntimeConfig.url.search + '?q='} passHref>
+          <Link href={publicRuntimeConfig.url.savanBabyStoreSearch + '?' + publicRuntimeConfig.url.savanBabyStoreSearchPromotedQuery} passHref>
             <Button variant='contained' color="primary" startIcon={<SavanBabyIcon/>} component='a'> Galeri</Button>
           </Link>
           <Button variant='outlined' startIcon={<ShopeeIcon/>} href={publicRuntimeConfig.url.shopee}> Shopee</Button>

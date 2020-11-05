@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {Card, CardActionArea, CardMedia, CardContent, Chip, Divider, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useRouter} from "next/router";
@@ -23,29 +24,29 @@ export default function Item({product}) {
     <Card className={classes.root}
           raised
     >
-      <CardActionArea
-        onClick={() => {
-          router.push(`/products/${product.brand.code}/${product.id}/${product.slug}`)
-        }}
-      >
-      <CardMedia
-        component='img'
-        image={product.thumbnailUrl}
-        title='Sleep Suit'
-      />
-      <CardContent>
-        <Typography className={classes.contentName} variant='subtitle1'>
-          {product.name}
-        </Typography>
-        <Typography><strong>Rp{product.price.toLocaleString()}</strong></Typography>
-        <div className={classes.contentTag}>
-          <Chip label={product.brand.name} size='small'
-                style={{backgroundColor: product.brand.color}}
+      <Link href={`/products/${product.brand.code}/${product.id}/${product.slug}`} passHref>
+        <CardActionArea
+        >
+          <CardMedia
+            component='img'
+            image={product.thumbnailUrl}
+            title='Sleep Suit'
           />
-        </div>
+          <CardContent>
+            <Typography className={classes.contentName} variant='subtitle1'>
+              {product.name}
+            </Typography>
+            <Typography><strong>Rp{product.price.toLocaleString()}</strong></Typography>
+            <div className={classes.contentTag}>
+              <Chip label={product.brand.name} size='small'
+                    style={{backgroundColor: product.brand.color}}
+              />
+            </div>
 
-      </CardContent>
-      </CardActionArea>
+          </CardContent>
+        </CardActionArea>
+      </Link>
+
     </Card>
   )
 }

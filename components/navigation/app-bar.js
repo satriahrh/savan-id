@@ -121,7 +121,7 @@ export default function NavigationAppBar({givenFilter}) {
               </IconButton>
               <Drawer anchor='top' open={drawerIsOpen} onClose={() => setDrawerIsOpen(false)}>
                 <List>
-                  <Link href='/baby' passHref>
+                  <Link href='/baby-store' passHref>
                     <ListItemLink>
                       <ListItemIcon>
                         <SavanBabyIcon/>
@@ -146,23 +146,17 @@ export default function NavigationAppBar({givenFilter}) {
                       <ListItemText primary='Kerja Sama'/>
                     </ListItemLink>
                   </Link>
-                  <Link href={publicRuntimeConfig.url.infoGeneral} passHref>
-                    <ListItemLink>
-                      <ListItemIcon><                      ContactSupportIcon/></ListItemIcon>
-                      <ListItemText>Informasi Umum</ListItemText>
-                    </ListItemLink>
-                  </Link>
                 </List>
               </Drawer>
             </Hidden>
             <Hidden xsDown>
-              <IconButton edge='start' onClick={() => {
-                router.push('/baby')
-              }}>
-                <SavanBabyIcon/>
-              </IconButton>
+              <Link href='/baby-store' passHref>
+                <IconButton edge='start'>
+                  <SavanBabyIcon/>
+                </IconButton>
+              </Link>
               <Typography className={classes.title} variant="h6" noWrap component='a'>
-                Savan Baby W
+                Savan Baby Store
               </Typography>
             </Hidden>
             <form className={classes.search} onSubmit={(e) => {
@@ -201,11 +195,6 @@ export default function NavigationAppBar({givenFilter}) {
               <Tooltip title='Informasi Kerja Sama'>
                 <IconButton href={publicRuntimeConfig.url.infoPartnership}>
                   <HandshakeIcon/>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title='Informasi Umum dan Lainya'>
-                <IconButton href={publicRuntimeConfig.url.infoGeneral}>
-                  <ContactSupportIcon/>
                 </IconButton>
               </Tooltip>
             </Hidden>

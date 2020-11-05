@@ -6,8 +6,8 @@ module.exports = {
       whatsapp: 'https://wa.me/621231232',
       instagram: 'https://instagram.com/satr',
       search: '/search',
-      infoPartnership: '/baby/kerja-sama',
-      infoGeneral: '/baby/informasi',
+      savanBabyStoreSearchPromotedQuery: 'q=sleepsuit',
+      infoPartnership: '/baby-store/kerja-sama',
       authorSite: 'https://satriahrh.github.io'
     },
     copy: {

@@ -59,7 +59,7 @@ export default function Index() {
         <title>{product.loading ? '' : product.detail.name + ' | Produk Savan'}</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
-      <NavigationAppBar/>
+      {/*<NavigationAppBar/>*/}
       {productDetail}
       <RelatedProducts/>
       <Footer/>
