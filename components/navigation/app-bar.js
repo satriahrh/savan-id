@@ -2,11 +2,14 @@ import {
   AppBar,
   Button,
   Container,
+  Grid,
   Divider,
   Drawer,
   Hidden,
   List,
   ListItem,
+  Modal,
+  Paper,
   ListItemIcon,
   ListItemText,
   IconButton,
@@ -14,12 +17,13 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  InputBase,
+  InputBase, useTheme, FormControl, InputLabel, Select, Input, MenuItem,
 } from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import {useEffect, useState} from "react";
 import SavanBabyIcon from "../../components/icons/savan-baby-icon";
@@ -29,66 +33,113 @@ import getConfig from "next/dist/next-server/lib/runtime-config";
 import search from "../../pages/search";
 import {useRouter} from "next/router";
 import Link from 'next/link'
+import SavanLogoIcon from "../icons/savan-logo-icon";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-      minHeight: '64px',
+  toolbar: {
+    // minHeight: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  flexContainer: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+  },
+  primaryIcon: {
+    width: 'auto',
+  },
+  searchBarRoot: {
+    backgroundColor: theme.palette.primary.light,
+    borderRadius: theme.spacing(1),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(2),
+      width: 'auto',
     },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  searchBarIcon: {
+    padding: theme.spacing(0, 1),
+    height: '100%',
+  },
+  searchBarInputBaseRoot: {
+    height: '100%',
+    width: '100%',
+  },
+  searchBarInputBaseInput: {
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '24ch',
+      '&:focus': {
+        width: '30ch',
       },
     },
-    search: {
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.primary.light,
-      },
-      marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-      },
-    },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    inputRoot: {
-      color: theme.palette.common.black
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch',
-        },
-      },
-    },
-  })
-);
+  },
+  navigation: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    height: '100%',
+    width: '100%',
+  }
+}));
+
+const BRAND = {
+  'fluffy': 'Fluffy Baby Wear',
+};
+
+const CATEGORY = {
+  'setelan': 'Setelan',
+  'sleepsuit': 'Sleepsuit',
+  'jumper': 'Jumper',
+};
+
+const SORT_BY = {
+  'popularity': 'popularitas',
+  '-date': 'waktu rilis terbaru',
+  'date': 'waktu rilis terlama',
+  '-price': 'harga termurah',
+  'price': 'harga termahal',
+};
 
 export default function NavigationAppBar({givenFilter}) {
-  const [filter, setFilter] = useState({q: ''});
+  const [filter, setFilter] = useState({q: '', page: 1, brands: [], categories: [], sortBy: 'popularity', state: 0});
+  const filterHandleChange = (event) => {
+    event.persist();
+    if (event.target.name !== null) {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        [event.target.name]: event.target.value,
+        state: 3,
+      }));
+    }
+  };
+  const filterHandleApply = () => {
+    searchBarFilterHandleClose();
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      page: 1,
+      state: 1,
+    }))
+  };
+  const theme = useTheme();
+  const [searchBarFilterIsOpen, setSearchBarFilterIsOpen] = useState(false);
+  const searchBarFilterToggle = () => {
+    setSearchBarFilterIsOpen((prevState) => {
+      if (prevState) {
+        return false
+      } else {
+        return true
+      }
+    })
+  };
+  const searchBarFilterHandleClose = () => {
+    setSearchBarFilterIsOpen(false);
+  };
   const {publicRuntimeConfig} = getConfig();
   const router = useRouter();
   NavigationAppBar.getInitialProps = ({query}) => {
@@ -103,79 +154,47 @@ export default function NavigationAppBar({givenFilter}) {
       setFilter(givenFilter)
     }
   }, [givenFilter, setFilter]);
+  useEffect(() => {
+    if (filter.state === 1) {
+      router.push({
+        pathname: `${publicRuntimeConfig.url.search}`,
+        query: filter
+      });
+    }
+  }, [filter.state]);
 
   return (
-    <div className={classes.root}>
+    <div style={{
+      height: theme.spacing(8)
+    }}>
       <AppBar position="fixed" color='default'>
-        <Container>
-          <Toolbar>
+        <Toolbar className={classes.toolbar} component={Container}>
+          <div className={classes.flexContainer}>
+            <Hidden xsDown>
+              <Link href='/' passHref>
+                <Button>
+                  <SavanLogoIcon className={classes.primaryIcon}/>
+                </Button>
+              </Link>
+            </Hidden>
             <Hidden smUp>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="open drawer"
-                onClick={() => setDrawerIsOpen(true)}
-              >
+              <IconButton>
                 <MenuIcon/>
               </IconButton>
-              <Drawer anchor='top' open={drawerIsOpen} onClose={() => setDrawerIsOpen(false)}>
-                <List>
-                  <Link href='/baby-store' passHref>
-                    <ListItemLink>
-                      <ListItemIcon>
-                        <SavanBabyIcon/>
-                      </ListItemIcon>
-                      <ListItemText primary='Beranda'/>
-                    </ListItemLink>
-                  </Link>
-                  <Link href={publicRuntimeConfig.url.shopee} passHref>
-                    <ListItemLink>
-                      <ListItemIcon>
-                        <ShopeeIcon/>
-                      </ListItemIcon>
-                      <ListItemText primary='Shopee store'/>
-                    </ListItemLink>
-                  </Link>
-                  <Divider/>
-                  <Link href={publicRuntimeConfig.url.infoPartnership} passHref>
-                    <ListItemLink>
-                      <ListItemIcon>
-                        <HandshakeIcon color='action'/>
-                      </ListItemIcon>
-                      <ListItemText primary='Kerja Sama'/>
-                    </ListItemLink>
-                  </Link>
-                </List>
-              </Drawer>
             </Hidden>
-            <Hidden xsDown>
-              <Link href='/baby-store' passHref>
-                <IconButton edge='start'>
-                  <SavanBabyIcon/>
-                </IconButton>
-              </Link>
-              <Typography className={classes.title} variant="h6" noWrap component='a'>
-                Savan Baby Store
-              </Typography>
-            </Hidden>
-            <form className={classes.search} onSubmit={(e) => {
-              router.push({
-                pathname: `${publicRuntimeConfig.url.search}`,
-                query: filter
-              });
-              e.preventDefault()
-            }}>
-              <div className={classes.searchIcon}>
-                <SearchIcon/>
-              </div>
+            <form
+              className={classes.searchBarRoot}
+              method='get'
+              action={publicRuntimeConfig.url.search}
+            >
+              <SearchIcon className={classes.searchBarIcon}/>
               <InputBase
-                placeholder="Search…"
+                name='q'
                 classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
+                  root: classes.searchBarInputBaseRoot,
+                  input: classes.searchBarInputBaseInput
                 }}
-                inputProps={{'aria-label': 'search'}}
+                placeholder='boleh kak, mau cari apa?'
                 value={filter.q}
                 onChange={(e) => {
                   e.persist();
@@ -185,24 +204,121 @@ export default function NavigationAppBar({givenFilter}) {
                   }))
                 }}
               />
+              <IconButton onClick={searchBarFilterToggle}>
+                <ArrowDropDownIcon/>
+              </IconButton>
             </form>
             <Hidden xsDown>
-              <Tooltip title='Menuju toko Shopee kami'>
-                <IconButton href={publicRuntimeConfig.url.shopee}>
-                  <ShopeeIcon/>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title='Informasi Kerja Sama'>
-                <IconButton href={publicRuntimeConfig.url.infoPartnership}>
-                  <HandshakeIcon/>
-                </IconButton>
-              </Tooltip>
+              <div className={classes.navigation}>
+
+              </div>
             </Hidden>
-          </Toolbar>
-        </Container>
+          </div>
+        </Toolbar>
       </AppBar>
+      <Modal
+        open={searchBarFilterIsOpen}
+        onClose={searchBarFilterHandleClose}
+      >
+        <Paper
+          elevation={5}
+          component={Container}
+          square
+          style={{
+            marginTop: theme.spacing(8)
+          }}
+        >
+          <Grid
+            container
+            component={Container}
+            direction='column'
+            style={{
+              paddingTop: theme.spacing(4),
+              paddingBottom: theme.spacing(2),
+            }}
+          >
+            <GridFormControl>
+              <FormControl>
+                <InputLabel htmlFor='brand-select'>Brand</InputLabel>
+                <Select
+                  multiple
+                  value={filter.brands}
+                  onChange={filterHandleChange}
+                  inputProps={{
+                    name: 'brands',
+                    id: 'brand-select',
+                  }}
+                  input={<Input/>}
+                  className={classes.formControlBaseSelectRoot}
+                >
+                  {Object.keys(BRAND).map((value) => (
+                    <MenuItem key={value} value={value}>{BRAND[value]}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridFormControl>
+            <GridFormControl>
+              <FormControl className={classes.formControlBaseRoot}>
+                <InputLabel htmlFor='category-select'>Kategori</InputLabel>
+                <Select
+                  multiple
+                  value={filter.categories}
+                  onChange={filterHandleChange}
+                  inputProps={{
+                    name: 'categories',
+                    id: 'category-select',
+                  }}
+                  input={<Input/>}
+                  className={classes.formControlBaseSelectRoot}
+                >
+                  {Object.keys(CATEGORY).map((value) => (
+                    <MenuItem key={value} value={value}>{CATEGORY[value]}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridFormControl>
+            <GridFormControl>
+              <FormControl className={classes.formControlBaseRoot}>
+                <InputLabel htmlFor="sort-by-select">Urutan</InputLabel>
+                <Select
+                  value={filter.sortBy}
+                  onChange={filterHandleChange}
+                  inputProps={{
+                    name: 'sortBy',
+                    id: 'sort-by-select',
+                  }}
+                  className={classes.formControlBaseSelectRoot}
+                >
+                  {Object.keys(SORT_BY).map((value) => (
+                    <MenuItem key={value} value={value}>{SORT_BY[value]}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridFormControl>
+            <GridFormControl>
+              <Button
+                variant='outlined'
+                className={classes.filterButton}
+                onClick={filterHandleApply}
+                disabled={filter.state !== 3}
+              >Terapkan</Button>
+            </GridFormControl>
+          </Grid>
+        </Paper>
+      </Modal>
     </div>
   );
+}
+
+
+function GridFormControl(props) {
+  return (
+    <Grid item
+          xs={12}
+          {...props}
+    >
+    </Grid>
+  )
 }
 
 function ListItemLink(props) {
