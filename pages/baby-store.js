@@ -1,21 +1,21 @@
 import Head from 'next/head'
-import Footer from "../../components/navigation/footer";
-import NavigationAppBar from "../../components/navigation/app-bar";
+import Footer from "../components/navigation/footer";
+import NavigationAppBar from "../components/navigation/app-bar";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {Button, ButtonGroup, Container, Grid, Typography, useMediaQuery} from "@material-ui/core";
-import SavanIcon from "../../components/icons/savan-icon";
-import ShopeeIcon from "../../components/icons/shopee-icon";
+import SavanBabyIcon from "../components/icons/savan-baby-icon";
+import ShopeeIcon from "../components/icons/shopee-icon";
 import {Facebook, Instagram, WhatsApp} from "@material-ui/icons";
 import Carousel from "react-multi-carousel";
-import {default as ProductCarousel} from "../../components/products/carousel";
+import {default as ProductCarousel} from "../components/products/carousel";
 import Link from "next/link";
 
 export default function Baby() {
   return (
     <>
       <Head>
-        <title>Toko Bayi</title>
+        <title>Savan Baby Store - toko kebutuhan pakaian bayi lengkap</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar/>
@@ -98,8 +98,8 @@ function Heading() {
         {isMobile ? '' : <br/>}
         <br/>
         <ButtonGroup>
-          <Link href={publicRuntimeConfig.url.search + '?q='} passHref>
-            <Button variant='contained' color="primary" startIcon={<SavanIcon/>} component='a'> Galeri</Button>
+          <Link href={publicRuntimeConfig.url.search + '?' + publicRuntimeConfig.url.savanBabyStoreSearchPromotedQuery} passHref>
+            <Button variant='contained' color="primary" startIcon={<SavanBabyIcon/>} component='a'> Galeri</Button>
           </Link>
           <Button variant='outlined' startIcon={<ShopeeIcon/>} href={publicRuntimeConfig.url.shopee}> Shopee</Button>
         </ButtonGroup>
@@ -177,10 +177,11 @@ const products = [
 ].map((name, i) => (
   {
     id: i,
-    slug: `/savan/${i}-sleep-suit-abu`,
+    slug: `sleep-suit-abu`,
     name: name,
     sizes: ['s', 'm'],
     brand: {
+      code: 'savan',
       name: 'Savan',
       color: '#FFD770',
     },
