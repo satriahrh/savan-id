@@ -5,6 +5,9 @@ import {
   Grid,
   Divider,
   Drawer,
+  Dialog,
+  DialogContent,
+  DialogActions,
   Hidden,
   List,
   ListItem,
@@ -84,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
     height: '100%',
+    width: '100%',
+  },
+  formControlBaseRoot: {
     width: '100%',
   }
 }));
@@ -216,106 +222,101 @@ export default function NavigationAppBar({givenFilter}) {
           </div>
         </Toolbar>
       </AppBar>
-      <Modal
+      <Dialog
         open={searchBarFilterIsOpen}
         onClose={searchBarFilterHandleClose}
+        maxWidth='xs'
+        fullWidth
       >
-        <Paper
-          elevation={5}
-          component={Container}
-          square
+        <Grid
+          container
+          component={DialogContent}
+          direction='row'
           style={{
-            marginTop: theme.spacing(8)
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(2),
           }}
+          spacing={2}
         >
-          <Grid
-            container
-            component={Container}
-            direction='column'
-            style={{
-              paddingTop: theme.spacing(4),
-              paddingBottom: theme.spacing(2),
-            }}
-          >
-            <GridFormControl>
-              <FormControl>
-                <InputLabel htmlFor='brand-select'>Brand</InputLabel>
-                <Select
-                  multiple
-                  value={filter.brands}
-                  onChange={filterHandleChange}
-                  inputProps={{
-                    name: 'brands',
-                    id: 'brand-select',
-                  }}
-                  input={<Input/>}
-                  className={classes.formControlBaseSelectRoot}
-                >
-                  {Object.keys(BRAND).map((value) => (
-                    <MenuItem key={value} value={value}>{BRAND[value]}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </GridFormControl>
-            <GridFormControl>
-              <FormControl className={classes.formControlBaseRoot}>
-                <InputLabel htmlFor='category-select'>Kategori</InputLabel>
-                <Select
-                  multiple
-                  value={filter.categories}
-                  onChange={filterHandleChange}
-                  inputProps={{
-                    name: 'categories',
-                    id: 'category-select',
-                  }}
-                  input={<Input/>}
-                  className={classes.formControlBaseSelectRoot}
-                >
-                  {Object.keys(CATEGORY).map((value) => (
-                    <MenuItem key={value} value={value}>{CATEGORY[value]}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </GridFormControl>
-            <GridFormControl>
-              <FormControl className={classes.formControlBaseRoot}>
-                <InputLabel htmlFor="sort-by-select">Urutan</InputLabel>
-                <Select
-                  value={filter.sortBy}
-                  onChange={filterHandleChange}
-                  inputProps={{
-                    name: 'sortBy',
-                    id: 'sort-by-select',
-                  }}
-                  className={classes.formControlBaseSelectRoot}
-                >
-                  {Object.keys(SORT_BY).map((value) => (
-                    <MenuItem key={value} value={value}>{SORT_BY[value]}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </GridFormControl>
-            <GridFormControl>
-              <Button
-                variant='outlined'
-                className={classes.filterButton}
-                onClick={filterHandleApply}
-                disabled={filter.state !== 3}
-              >Terapkan</Button>
-            </GridFormControl>
-          </Grid>
-        </Paper>
-      </Modal>
+          <GridFormControl>
+            <FormControl className={classes.formControlBaseRoot}>
+              <InputLabel htmlFor='brand-select'>Brand</InputLabel>
+              <Select
+                multiple
+                value={filter.brands}
+                onChange={filterHandleChange}
+                inputProps={{
+                  name: 'brands',
+                  id: 'brand-select',
+                }}
+                input={<Input/>}
+                className={classes.formControlBaseSelectRoot}
+              >
+                {Object.keys(BRAND).map((value) => (
+                  <MenuItem key={value} value={value}>{BRAND[value]}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </GridFormControl>
+          <GridFormControl>
+            <FormControl className={classes.formControlBaseRoot}>
+              <InputLabel htmlFor='category-select'>Kategori</InputLabel>
+              <Select
+                multiple
+                value={filter.categories}
+                onChange={filterHandleChange}
+                inputProps={{
+                  name: 'categories',
+                  id: 'category-select',
+                }}
+                input={<Input/>}
+                className={classes.formControlBaseSelectRoot}
+              >
+                {Object.keys(CATEGORY).map((value) => (
+                  <MenuItem key={value} value={value}>{CATEGORY[value]}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </GridFormControl>
+          <GridFormControl>
+            <FormControl className={classes.formControlBaseRoot}>
+              <InputLabel htmlFor="sort-by-select">Urutan</InputLabel>
+              <Select
+                value={filter.sortBy}
+                onChange={filterHandleChange}
+                inputProps={{
+                  name: 'sortBy',
+                  id: 'sort-by-select',
+                }}
+                className={classes.formControlBaseSelectRoot}
+              >
+                {Object.keys(SORT_BY).map((value) => (
+                  <MenuItem key={value} value={value}>{SORT_BY[value]}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </GridFormControl>
+          <GridFormControl sm={12} style={{textAlign: 'right'}}>
+            <Button
+              variant='contained'
+              className={classes.filterButton}
+              onClick={filterHandleApply}
+              disabled={filter.state !== 3}
+              color='primary'
+            >Terapkan</Button>
+          </GridFormControl>
+        </Grid>
+      </Dialog>
     </div>
   );
 }
 
-
 function GridFormControl(props) {
   return (
-    <Grid item
-          xs={12}
-          {...props}
+    <Grid
+      item
+      xs={12}
+      {...props}
     >
     </Grid>
   )

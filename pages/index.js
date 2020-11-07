@@ -70,16 +70,18 @@ function SiteCarousel() {
           <Grid item xs={12} sm={6} key={i}
           >
             <Card raised className={classes.root}>
-              <CardActionArea
+              <Link
                 href={site.path}
-                as={Link}
+                passHref
               >
-                <CardContent>
-                  <Typography variant='h4'>{site.title}</Typography>
-                  <Divider/>
-                  <Typography variant='body1'>{site.description}</Typography>
-                </CardContent>
-              </CardActionArea>
+                <CardActionArea>
+                  <CardContent>
+                    <Typography variant='h4'>{site.title}</Typography>
+                    <Divider/>
+                    <Typography variant='body1'>{site.description}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Link>
             </Card>
           </Grid>
         ))}
