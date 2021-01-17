@@ -3,37 +3,20 @@ import {
   Button,
   Container,
   Grid,
-  Divider,
-  Drawer,
   Dialog,
   DialogContent,
-  DialogActions,
   Hidden,
-  List,
   ListItem,
-  Modal,
-  Paper,
-  ListItemIcon,
-  ListItemText,
   IconButton,
-  SvgIcon,
   Toolbar,
-  Tooltip,
-  Typography,
   InputBase, useTheme, FormControl, InputLabel, Select, Input, MenuItem,
 } from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
-import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import {useEffect, useState} from "react";
-import SavanBabyIcon from "../../components/icons/savan-baby-icon";
-import ShopeeIcon from "../../components/icons/shopee-icon";
-import HandshakeIcon from "../../components/icons/handshake-icon";
+import React, {useEffect, useState} from "react";
 import getConfig from "next/dist/next-server/lib/runtime-config";
-import search from "../../pages/search";
 import {useRouter} from "next/router";
 import Link from 'next/link'
 import SavanLogoIcon from "../icons/savan-logo-icon";
@@ -136,11 +119,7 @@ export default function NavigationAppBar({givenFilter}) {
   const [searchBarFilterIsOpen, setSearchBarFilterIsOpen] = useState(false);
   const searchBarFilterToggle = () => {
     setSearchBarFilterIsOpen((prevState) => {
-      if (prevState) {
-        return false
-      } else {
-        return true
-      }
+      return !prevState;
     })
   };
   const searchBarFilterHandleClose = () => {
@@ -153,7 +132,6 @@ export default function NavigationAppBar({givenFilter}) {
   };
 
   const classes = useStyles();
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   useEffect(() => {
     if (givenFilter && filter !== givenFilter) {
@@ -165,7 +143,7 @@ export default function NavigationAppBar({givenFilter}) {
       router.push({
         pathname: `${publicRuntimeConfig.url.search}`,
         query: filter
-      });
+      }).then(r => console.log("yes"));
     }
   }, [filter.state]);
 
@@ -320,12 +298,4 @@ function GridFormControl(props) {
     >
     </Grid>
   )
-}
-
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-
-function onSubmitSearch() {
-
 }
