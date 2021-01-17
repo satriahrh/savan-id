@@ -6,15 +6,12 @@ import {
   Dialog,
   DialogContent,
   Hidden,
-  ListItem,
   IconButton,
   Toolbar,
-  InputBase, useTheme, FormControl, InputLabel, Select, Input, MenuItem,
+  useTheme, FormControl, InputLabel, Select, Input, MenuItem,
 } from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import React, {useEffect, useState} from "react";
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {useRouter} from "next/router";
@@ -143,7 +140,7 @@ export default function NavigationAppBar({givenFilter}) {
       router.push({
         pathname: `${publicRuntimeConfig.url.search}`,
         query: filter
-      }).then(r => console.log("yes"));
+      }).then(() => console.log("yes"));
     }
   }, [filter.state]);
 
@@ -166,37 +163,12 @@ export default function NavigationAppBar({givenFilter}) {
                 <MenuIcon/>
               </IconButton>
             </Hidden>
-            <form
-              className={classes.searchBarRoot}
-              method='get'
-              action={publicRuntimeConfig.url.search}
+            <Button
+              onClick={searchBarFilterToggle}
+              fullWidth
             >
-              <SearchIcon className={classes.searchBarIcon}/>
-              <InputBase
-                name='q'
-                classes={{
-                  root: classes.searchBarInputBaseRoot,
-                  input: classes.searchBarInputBaseInput
-                }}
-                placeholder='boleh kak, mau cari apa?'
-                value={filter.q}
-                onChange={(e) => {
-                  e.persist();
-                  setFilter((prevFilter) => ({
-                    ...prevFilter,
-                    q: e.target.value,
-                  }))
-                }}
-              />
-              <IconButton onClick={searchBarFilterToggle}>
-                <ArrowDropDownIcon/>
-              </IconButton>
-            </form>
-            <Hidden xsDown>
-              <div className={classes.navigation}>
-
-              </div>
-            </Hidden>
+              mau cari apa?
+            </Button>
           </div>
         </Toolbar>
       </AppBar>
