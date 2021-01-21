@@ -1,7 +1,6 @@
 import {
   AppBar,
   Button,
-  ButtonBase,
   Container,
   Grid,
   Dialog,
@@ -30,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'nowrap',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     height: '100%',
     width: '100%',
   },
@@ -75,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   navSearch: {
+    textTransform: 'none',
+    fontWeight: 400,
   }
 }));
 
@@ -167,12 +169,13 @@ export default function NavigationAppBar({givenFilter}) {
                 <MenuIcon/>
               </IconButton>
             </Hidden>
-            <ButtonBase
+            <Button
               onClick={searchBarFilterToggle}
               className={classes.navSearch}
+              variant='outlined'
             >
               <SearchIcon />Boleh kakak, mau cari apa?
-            </ButtonBase>
+            </Button>
           </div>
         </Toolbar>
       </AppBar>
