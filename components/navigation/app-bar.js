@@ -1,6 +1,7 @@
 import {
   AppBar,
   Button,
+  ButtonBase,
   Container,
   Grid,
   Dialog,
@@ -12,6 +13,7 @@ import {
 } from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
 import React, {useEffect, useState} from "react";
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {useRouter} from "next/router";
@@ -65,12 +67,14 @@ const useStyles = makeStyles((theme) => ({
   },
   navigation: {
     display: 'flex',
-    flexDirection: 'row-reverse',
     height: '100%',
     width: '100%',
+    justifyContent: 'space-between'
   },
   formControlBaseRoot: {
     width: '100%',
+  },
+  navSearch: {
   }
 }));
 
@@ -163,12 +167,12 @@ export default function NavigationAppBar({givenFilter}) {
                 <MenuIcon/>
               </IconButton>
             </Hidden>
-            <Button
+            <ButtonBase
               onClick={searchBarFilterToggle}
-              fullWidth
+              className={classes.navSearch}
             >
-              mau cari apa?
-            </Button>
+              <SearchIcon />Boleh kakak, mau cari apa?
+            </ButtonBase>
           </div>
         </Toolbar>
       </AppBar>
