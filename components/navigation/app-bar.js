@@ -7,6 +7,7 @@ import {
   DialogContent,
   Hidden,
   IconButton,
+  SwipeableDrawer,
   Toolbar,
   useTheme, FormControl, InputLabel, Select, Input, MenuItem,
 } from '@material-ui/core'
@@ -18,6 +19,7 @@ import getConfig from "next/dist/next-server/lib/runtime-config";
 import {useRouter} from "next/router";
 import Link from 'next/link'
 import SavanLogoIcon from "../icons/savan-logo-icon";
+import FilterDrawer from "./filter-drawer";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -174,14 +176,21 @@ export default function NavigationAppBar({givenFilter}) {
               className={classes.navSearch}
               variant='outlined'
             >
-              <SearchIcon />Boleh kakak, mau cari apa?
+              <SearchIcon/>Boleh kakak, mau cari apa?
             </Button>
           </div>
         </Toolbar>
       </AppBar>
-      <Dialog
+      <SwipeableDrawer
+        anchor='right'
+        onOpen={() => setSearchBarFilterIsOpen(true)}
+        onClose={() => setSearchBarFilterIsOpen(false)}
         open={searchBarFilterIsOpen}
-        onClose={searchBarFilterHandleClose}
+      >
+        <FilterDrawer />
+      </SwipeableDrawer>
+      <Dialog
+        open={false}
         maxWidth='xs'
         fullWidth
       >
