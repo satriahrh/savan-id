@@ -75,7 +75,6 @@ export default function FilterDrawer({givenFilter}) {
     }))
   }
 
-  console.log(filter)
   useEffect(() => {
     if (givenFilter && filter !== givenFilter) {
       setFilter(givenFilter)
