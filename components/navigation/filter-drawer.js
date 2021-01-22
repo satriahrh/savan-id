@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Collapse from '@material-ui/core/Collapse';
@@ -11,6 +11,8 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import getConfig from "next/dist/next-server/lib/runtime-config";
+import {useRouter} from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -51,16 +53,42 @@ const SORT_BY = {
 
 const DEFAULT_SORT_BY = 'popularity'
 
-export default function FilterDrawer() {
+export default function FilterDrawer({givenFilter}) {
   const classes = useStyles();
+  const {publicRuntimeConfig} = getConfig();
+  const router = useRouter();
 
-  const [selectedBrand, setSelectedBrand] = useState([])
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedSortBy, setSelectedSortBy] = useState(DEFAULT_SORT_BY);
+  const [filter, setFilter] = useState({
+    q: '',
+    page: 1,
+    brands: [],
+    categories: [],
+    sortBy: 'popularity',
+    state: 0
+  });
 
   const handleApply = () => {
-    console.log(selectedBrand, selectedCategories, selectedSortBy)
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      page: 1,
+      state: 1,
+    }))
   }
+
+  console.log(filter)
+  useEffect(() => {
+    if (givenFilter && filter !== givenFilter) {
+      setFilter(givenFilter)
+    }
+  }, [givenFilter, setFilter]);
+  useEffect(() => {
+    if (filter.state === 1) {
+      router.push({
+        pathname: `${publicRuntimeConfig.url.search}`,
+        query: filter
+      }).then(() => console.log("yes"));
+    }
+  }, [filter.state]);
 
   return (
     <div className={classes.drawer}>
@@ -75,20 +103,23 @@ export default function FilterDrawer() {
         <ListOfCheckbox
           title='Brand'
           selections={BRAND}
-          selected={selectedBrand}
-          setSelected={setSelectedBrand}
+          filter={filter}
+          setFilter={setFilter}
+          filterKey={'brands'}
         />
         <ListOfCheckbox
           title='Kategori'
           selections={CATEGORY}
-          selected={selectedCategories}
-          setSelected={setSelectedCategories}
+          filter={filter}
+          setFilter={setFilter}
+          filterKey={'categories'}
         />
         <ListOfRadio
           title='Urutkan dari'
           selections={SORT_BY}
-          selected={selectedSortBy}
-          setSelected={setSelectedSortBy}
+          filter={filter}
+          setFilter={setFilter}
+          filterKey={'sortBy'}
         />
         <Button
           className={classes.applyButton}
@@ -102,13 +133,14 @@ export default function FilterDrawer() {
   );
 }
 
-function ListOfCheckbox({title, selections, selected, setSelected}) {
+function ListOfCheckbox({title, selections, filter, setFilter, filterKey}) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleClick = () => {
     setOpen(!open);
   }
 
+  const selected = filter[filterKey]
   const handleToggle = (value) => () => {
     const currentIndex = selected.indexOf(value);
     const newSelected = [...selected];
@@ -117,7 +149,10 @@ function ListOfCheckbox({title, selections, selected, setSelected}) {
     } else {
       newSelected.splice(currentIndex, 1);
     }
-    setSelected(newSelected);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      [filterKey]: newSelected,
+    }))
   };
 
   return (
@@ -150,15 +185,19 @@ function ListOfCheckbox({title, selections, selected, setSelected}) {
   )
 }
 
-function ListOfRadio({title, selections, selectionsIcon, selected, setSelected}) {
+function ListOfRadio({title, selections, selectionsIcon, filter, setFilter, filterKey}) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleClick = () => {
     setOpen(!open);
   }
 
+  const selected = filter[filterKey]
   const handleToggle = (value) => () => {
-    setSelected(value);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      [filterKey]: value,
+    }))
   };
 
   return (
