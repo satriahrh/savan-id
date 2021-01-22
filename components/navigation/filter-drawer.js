@@ -31,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 
 const BRAND = {
   'fluffy': 'Fluffy Baby Wear',
+  'little-palmerhaus': 'Little Palmerhaus',
+  'kacakids': 'Kaca Kids'
 };
 
 const CATEGORY = {
@@ -40,24 +42,25 @@ const CATEGORY = {
 };
 
 const SORT_BY = {
-  'popularity': 'popularitas',
-  '-date': 'waktu rilis terbaru',
-  'date': 'waktu rilis terlama',
-  '-price': 'harga termurah',
-  'price': 'harga termahal',
+  'popularity': 'Popularitas',
+  '-date': 'Terbaru',
+  'date': 'Terlama',
+  '-price': 'Termurah',
+  'price': 'Termahal',
 };
+
+const DEFAULT_SORT_BY = 'popularity'
 
 export default function FilterDrawer() {
   const classes = useStyles();
 
-  const brands = ["Fluffy Baby Wear", "Little Palmerhaus", "Kaca Kids"]
   const [selectedBrand, setSelectedBrand] = useState([])
-
-  const categories = ["Sleepsuit", "Kaca Kids"]
   const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedSortBy, setSelectedSortBy] = useState(DEFAULT_SORT_BY);
 
-  const sortBy = ["Popularitas", "Terbaru", "Terlama", "Termurah", "Termahal"]
-  const [selectedSortBy, setSelectedSortBy] = useState(sortBy[0]);
+  const handleApply = () => {
+    console.log(selectedBrand, selectedCategories, selectedSortBy)
+  }
 
   return (
     <div className={classes.drawer}>
@@ -71,25 +74,26 @@ export default function FilterDrawer() {
         </ListItem>
         <ListOfCheckbox
           title='Brand'
-          selections={brands}
+          selections={BRAND}
           selected={selectedBrand}
           setSelected={setSelectedBrand}
         />
         <ListOfCheckbox
           title='Kategori'
-          selections={categories}
+          selections={CATEGORY}
           selected={selectedCategories}
           setSelected={setSelectedCategories}
         />
         <ListOfRadio
           title='Urutkan dari'
-          selections={sortBy}
+          selections={SORT_BY}
           selected={selectedSortBy}
           setSelected={setSelectedSortBy}
         />
         <Button
           className={classes.applyButton}
           variant='outlined'
+          onClick={handleApply}
         >
           Cari dengan filter
         </Button>
@@ -124,15 +128,15 @@ function ListOfCheckbox({title, selections, selected, setSelected}) {
       </ListItem>
       <Collapse in={open} unmountOnExit>
         <List disablePadding>
-          {selections.map((value) => {
-            const labelId = `checkbox-list-${title}-label-${value}`;
+          {Object.entries(selections).map(([key, value]) => {
+            const labelId = `checkbox-list-${title}-label-${key}`;
             return (
               <ListItem
-                className={classes.nested} key={value} role={undefined} dense button
-                onClick={handleToggle(value)}
+                className={classes.nested} key={key} role={undefined} dense button
+                onClick={handleToggle(key)}
               >
                 <Checkbox
-                  edge="start" checked={selected.indexOf(value) !== -1}
+                  edge="start" checked={selected.indexOf(key) !== -1}
                   tabIndex={-1} disableRipple inputProps={{'aria-labelledby': labelId}}
                 />
                 <ListItemText id={labelId} primary={value}/>
@@ -165,15 +169,15 @@ function ListOfRadio({title, selections, selectionsIcon, selected, setSelected})
       </ListItem>
       <Collapse in={open} unmountOnExit>
         <List disablePadding>
-          {selections.map((value, id) => {
-            const labelId = `checkbox-list-${title}-label-${value}`;
+          {Object.entries(selections).map(([key, value], id) => {
+            const labelId = `checkbox-list-${title}-label-${key}`;
             return (
               <ListItem
-                className={classes.nested} key={value} role={undefined} dense button
-                onClick={handleToggle(value)}
+                className={classes.nested} key={key} role={undefined} dense button
+                onClick={handleToggle(key)}
               >
                 <Radio
-                  edge="start" checked={selected === value}
+                  edge="start" checked={selected === key}
                   tabIndex={-1} disableRipple inputProps={{'aria-labelledby': labelId}}
                 />
                 <ListItemText id={labelId} primary={value}/>
