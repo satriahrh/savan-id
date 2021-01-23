@@ -110,7 +110,7 @@ export default function FilterDrawer({givenFilter}) {
     }
 
     if (router.pathname === "/search") {
-      let text = ""
+      let text = "Produk "
       filter.brands.forEach((value, index) => {
         text += BRAND[value]
         if (index < filter.brands.length - 1) {
