@@ -88,14 +88,7 @@ export default function NavigationAppBar({givenFilter}) {
           </div>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
-        anchor='right'
-        onOpen={() => setSearchBarFilterIsOpen(true)}
-        onClose={() => setSearchBarFilterIsOpen(false)}
-        open={searchBarFilterIsOpen}
-      >
-        <FilterDrawer givenFilter={givenFilter}/>
-      </SwipeableDrawer>
+      <FilterDrawer isOpen={searchBarFilterIsOpen} setIsOpen={setSearchBarFilterIsOpen} givenFilter={givenFilter}/>
     </div>
   );
 }

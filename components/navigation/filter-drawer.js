@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -53,7 +54,7 @@ const SORT_BY = {
 
 const DEFAULT_SORT_BY = 'popularity'
 
-export default function FilterDrawer({givenFilter}) {
+export default function FilterDrawer({isOpen, setIsOpen, givenFilter}) {
   const classes = useStyles();
   const {publicRuntimeConfig} = getConfig();
   const router = useRouter();
@@ -66,6 +67,7 @@ export default function FilterDrawer({givenFilter}) {
     sortBy: 'popularity',
     state: 0
   });
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   const handleApply = () => {
     setFilter((prevFilter) => ({
@@ -73,6 +75,12 @@ export default function FilterDrawer({givenFilter}) {
       page: 1,
       state: 1,
     }))
+    setOpen(false)
+  }
+
+  const setOpen = (value) => {
+    setDrawerIsOpen(value)
+    setIsOpen(value)
   }
 
   useEffect(() => {
@@ -88,8 +96,19 @@ export default function FilterDrawer({givenFilter}) {
       }).then(() => console.log("yes"));
     }
   }, [filter.state]);
+  useEffect(() => {
+   if (isOpen !== drawerIsOpen) {
+     setDrawerIsOpen(isOpen)
+   }
+  }, [isOpen])
 
   return (
+    <SwipeableDrawer
+      anchor='right'
+      onClose={() => {setOpen(false)}}
+      onOpen={() => {setOpen(true)}}
+      open={drawerIsOpen}
+    >
     <div className={classes.drawer}>
       <List className={classes.root}>
         <ListItem>
@@ -129,6 +148,7 @@ export default function FilterDrawer({givenFilter}) {
         </Button>
       </List>
     </div>
+    </SwipeableDrawer>
   );
 }
 
