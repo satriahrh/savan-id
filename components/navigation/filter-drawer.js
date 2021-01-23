@@ -14,6 +14,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import getConfig from "next/dist/next-server/lib/runtime-config";
 import {useRouter} from "next/router";
+import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -29,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
   applyButton: {
     margin: theme.spacing(1),
+  },
+  navSearch: {
+    textTransform: 'none',
+    fontWeight: 400,
   }
 }));
 
@@ -54,7 +59,7 @@ const SORT_BY = {
 
 const DEFAULT_SORT_BY = 'popularity'
 
-export default function FilterDrawer({isOpen, setIsOpen, givenFilter}) {
+export default function FilterDrawer({givenFilter}) {
   const classes = useStyles();
   const {publicRuntimeConfig} = getConfig();
   const router = useRouter();
@@ -68,6 +73,11 @@ export default function FilterDrawer({isOpen, setIsOpen, givenFilter}) {
     state: 0
   });
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const handleDrawerToggle = () => {
+    setDrawerIsOpen((prevState) => {
+      return !prevState;
+    })
+  };
 
   const handleApply = () => {
     setFilter((prevFilter) => ({
@@ -80,7 +90,6 @@ export default function FilterDrawer({isOpen, setIsOpen, givenFilter}) {
 
   const setOpen = (value) => {
     setDrawerIsOpen(value)
-    setIsOpen(value)
   }
 
   useEffect(() => {
@@ -96,59 +105,67 @@ export default function FilterDrawer({isOpen, setIsOpen, givenFilter}) {
       }).then(() => console.log("yes"));
     }
   }, [filter.state]);
-  useEffect(() => {
-   if (isOpen !== drawerIsOpen) {
-     setDrawerIsOpen(isOpen)
-   }
-  }, [isOpen])
 
   return (
-    <SwipeableDrawer
-      anchor='right'
-      onClose={() => {setOpen(false)}}
-      onOpen={() => {setOpen(true)}}
-      open={drawerIsOpen}
-    >
-    <div className={classes.drawer}>
-      <List className={classes.root}>
-        <ListItem>
-          <ListItemText>
-            <Typography variant='h5'>
-              Mau cari apa kak?
-            </Typography>
-          </ListItemText>
-        </ListItem>
-        <ListOfCheckbox
-          title='Brand'
-          selections={BRAND}
-          filter={filter}
-          setFilter={setFilter}
-          filterKey={'brands'}
-        />
-        <ListOfCheckbox
-          title='Kategori'
-          selections={CATEGORY}
-          filter={filter}
-          setFilter={setFilter}
-          filterKey={'categories'}
-        />
-        <ListOfRadio
-          title='Urutkan dari'
-          selections={SORT_BY}
-          filter={filter}
-          setFilter={setFilter}
-          filterKey={'sortBy'}
-        />
-        <Button
-          className={classes.applyButton}
-          variant='outlined'
-          onClick={handleApply}
-        >
-          Cari dengan filter
-        </Button>
-      </List>
-    </div>
-    </SwipeableDrawer>
+    <>
+      <Button
+        onClick={handleDrawerToggle}
+        className={classes.navSearch}
+        variant='outlined'
+      >
+        <SearchIcon/>Boleh kakak, mau cari apa?
+      </Button>
+      <SwipeableDrawer
+        anchor='right'
+        onClose={() => {
+          setOpen(false)
+        }}
+        onOpen={() => {
+          setOpen(true)
+        }}
+        open={drawerIsOpen}
+      >
+        <div className={classes.drawer}>
+          <List className={classes.root}>
+            <ListItem>
+              <ListItemText>
+                <Typography variant='h5'>
+                  Mau cari apa kak?
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            <ListOfCheckbox
+              title='Brand'
+              selections={BRAND}
+              filter={filter}
+              setFilter={setFilter}
+              filterKey={'brands'}
+            />
+            <ListOfCheckbox
+              title='Kategori'
+              selections={CATEGORY}
+              filter={filter}
+              setFilter={setFilter}
+              filterKey={'categories'}
+            />
+            <ListOfRadio
+              title='Urutkan dari'
+              selections={SORT_BY}
+              filter={filter}
+              setFilter={setFilter}
+              filterKey={'sortBy'}
+            />
+            <Button
+              className={classes.applyButton}
+              variant='outlined'
+              onClick={handleApply}
+            >
+              Cari dengan filter
+            </Button>
+          </List>
+        </div>
+      </SwipeableDrawer>
+    </>
   );
 }
 
@@ -204,7 +221,7 @@ function ListOfCheckbox({title, selections, filter, setFilter, filterKey}) {
   )
 }
 
-function ListOfRadio({title, selections, selectionsIcon, filter, setFilter, filterKey}) {
+function ListOfRadio({title, selections, filter, setFilter, filterKey}) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleClick = () => {
@@ -227,7 +244,7 @@ function ListOfRadio({title, selections, selectionsIcon, filter, setFilter, filt
       </ListItem>
       <Collapse in={open} unmountOnExit>
         <List disablePadding>
-          {Object.entries(selections).map(([key, value], id) => {
+          {Object.entries(selections).map(([key, value]) => {
             const labelId = `checkbox-list-${title}-label-${key}`;
             return (
               <ListItem
