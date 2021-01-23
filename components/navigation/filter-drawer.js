@@ -109,29 +109,31 @@ export default function FilterDrawer({givenFilter}) {
       }).then(() => console.log("yes"));
     }
 
-    let text = ""
-    filter.brands.forEach((value, index) => {
-      text += BRAND[value]
-      if (index < filter.brands.length - 1) {
-        text += ", "
-      }
-    })
+    if (router.pathname === "/search") {
+      let text = ""
+      filter.brands.forEach((value, index) => {
+        text += BRAND[value]
+        if (index < filter.brands.length - 1) {
+          text += ", "
+        }
+      })
 
-    if (filter.brands.length !== 0) {
-      text += " - "
-    }
-    filter.categories.forEach((value, index) => {
-      text += CATEGORY[value]
-      if (index < filter.categories.length - 1) {
-        text += ", "
+      if (filter.brands.length !== 0) {
+        text += " - "
       }
-    })
+      filter.categories.forEach((value, index) => {
+        text += CATEGORY[value]
+        if (index < filter.categories.length - 1) {
+          text += ", "
+        }
+      })
 
-    if (filter.categories.length !== 0) {
-      text += " - "
+      if (filter.categories.length !== 0) {
+        text += " - "
+      }
+      text += SORT_BY[filter.sortBy]
+      setToggleText(text)
     }
-    text += SORT_BY[filter.sortBy]
-    setToggleText(text)
   }, [filter.state]);
 
   return (
