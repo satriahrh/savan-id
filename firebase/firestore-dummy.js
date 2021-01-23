@@ -33,28 +33,28 @@ productsRef.doc('savan-jumper-solid').set({
       'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
     ],
-    'vPutih': [
+    'Putih': [
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaPutih',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaPutih',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaPutih',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatPutih',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaPutih',
     ],
-    'vPolos': [
+    'Polos': [
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaPolos',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaPolos',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaPolos',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatPolos',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaPolos',
     ],
-    'vStrip': [
+    'Strip': [
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaStrip',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaStrip',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaStrip',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatStrip',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaStrip',
     ],
-    'vStrap': [
+    'Strap': [
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaStrap',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaStrap',
       'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaStrap',

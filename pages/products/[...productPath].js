@@ -29,6 +29,7 @@ import NavigationAppBar from "../../components/navigation/app-bar";
 import {default as RelatedProductsCarousel} from "../../components/products/carousel";
 import {makeStyles} from "@material-ui/core/styles";
 import Footer from "../../components/navigation/footer";
+import {firebaseInit} from "../../firebase/firestore.init";
 
 export default function Index() {
   const router = useRouter();
@@ -70,7 +71,7 @@ export default function Index() {
 function ProductDetail({productDetail}) {
   const classes = styles();
   const theme = useTheme();
-  const [selectedVariant, setSelectedVariant] = useState(Object.keys(productDetail.variants)[0]);
+  const [selectedVariant, setSelectedVariant] = useState('main');
   const handleVariantChange = (event, newVariant) => {
     if (newVariant) {
       setSelectedVariant(newVariant);
@@ -106,7 +107,7 @@ function ProductDetail({productDetail}) {
             xs={12} md={7}
             className={classes.carouselRoot}
       >
-        <ProductCarousel photos={productDetail.variants[selectedVariant].featuredPhotos}/>
+        <ProductCarousel photos={productDetail.photos[selectedVariant]}/>
       </Grid>
       <Grid item
             xs={12} md={5}
@@ -121,7 +122,7 @@ function ProductDetail({productDetail}) {
         <div className={classes.detailVariant}>
           <span className={classes.detailVariantSelected}>Varian</span>
           <ToggleButtonGroup exclusive value={selectedVariant} onChange={handleVariantChange}>
-            {productDetail ? Object.keys(productDetail.variants).map((variant, i) => (
+            {productDetail ? productDetail.variants.main.map((variant, i) => (
               <ToggleButton key={i} size='small' value={variant}>
                 {variant}
               </ToggleButton>
@@ -131,7 +132,7 @@ function ProductDetail({productDetail}) {
         <div className={classes.detailSize}>
           <span className={classes.detailSizeSelected}>Ukuran</span>
           <ToggleButtonGroup exclusive value={selectedSize} onChange={handleSizeChange}>
-            {productDetail ? productDetail.sizes.map((size, i) => (
+            {productDetail ? productDetail.variants.secondary.map((size, i) => (
               <ToggleButton key={i} size='small' value={size}>
                 {size}
               </ToggleButton>
@@ -146,11 +147,7 @@ function ProductDetail({productDetail}) {
                   variant='outlined'
                   size='large'
                   onClick={() => {
-                    if (selectedSize) {
-                      window.open(productDetail.shopeeUrlSizes[selectedSize])
-                    } else {
-                      openSnackbar('Pilih ukuran terlebih dahulu')
-                    }
+                    window.open(productDetail.marketplacesUrl.shopee)
                   }}
           >Beli di Shopee</Button>
         </div>
@@ -324,50 +321,60 @@ function getIdFromProductPath(productPath) {
 }
 
 async function getProduct(id) {
+  const firebase = await firebaseInit();
+  let db = firebase.firestore()
+  db.useEmulator("localhost", 8080);
+  id = 'savan-jumper-solid';
+  const doc = await db.collection('products').doc(id).get();
+  if (doc.exists) {
+    return doc.data();
+  }
   return {
-    id: id,
-    name: 'Jumper Nahkoda Abu',
-    sizes: ['NB', 'S', 'M', 'L', '1', '2', '3'],
-    brand: {
-      name: 'Savan',
-      color: '#FFD770',
-    },
-    price: 21300,
-    thumbnailUrl: `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=Jumper Nahkoda Abu`,
+    name: "Jumper Solid",
     variants: {
-      Putih: {
-        featuredPhotos: [
-          'https://via.placeholder.com/600x600/8f8e94/8f8e94?text=FotoUtamaPutih',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetiga',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempat',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelima',
-        ]
-      },
-      Polos: {
-        featuredPhotos: [
-          'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
-        ]
-      },
-      Pilus: {
-        featuredPhotos: [
-          'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
-        ]
-      },
-      Strip: {
-        featuredPhotos: [
-          'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
-        ]
-      },
-      Strap: {
-        featuredPhotos: [
-          'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
-          'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
-        ]
-      },
+      main: ['Putih', 'Polos', 'Strip', 'Strap'],
+      secondary: ['NB', '3-6m', '6-9m', '9-12m', '1y', '2y', '3y'],
+    },
+    brandName: 'Savan Baby Store',
+    brandColor: '#FFD770',
+    price: 21300,
+    photos: {
+      thumbnails: [`https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=Jumper Nahkoda Abu`],
+      main: [
+        'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua',
+      ],
+      'vPutih': [
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaPutih',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaPutih',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaPutih',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatPutih',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaPutih',
+      ],
+      'vPolos': [
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaPolos',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaPolos',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaPolos',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatPolos',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaPolos',
+      ],
+      'vStrip': [
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaStrip',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaStrip',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaStrip',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatStrip',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaStrip',
+      ],
+      'vStrap': [
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoUtamaStrap',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeduaStrap',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKetigaStrap',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKeempatStrap',
+        'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKelimaStrap',
+      ],
+    },
+    marketplacesUrl: {
+      shopee: `https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490`,
     },
     descriptions: [
       {
@@ -383,15 +390,6 @@ async function getProduct(id) {
         details: "Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
       },
     ],
-    shopeeUrlSizes: {
-      NB: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      S: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      M: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      L: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      1: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      2: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      3: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-    }
   }
 }
 
