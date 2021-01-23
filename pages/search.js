@@ -22,6 +22,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useEffect, useState} from "react";
 import TuneIcon from '@material-ui/icons/Tune';
 import getConfig from "next/dist/next-server/lib/runtime-config";
+import {stringify} from "../utils/search-filter";
 
 export default function Index() {
   const classes = styles();
@@ -30,7 +31,7 @@ export default function Index() {
     return {query}
   };
   const {publicRuntimeConfig} = getConfig();
-  const [filter, setFilter] = useState({q: '', page: 1, brands: [], categories: [], sortBy: 'popularity', state: 0,});
+  const [filter, setFilter] = useState({page: 1, brands: [], categories: [], sortBy: 'popularity', state: 0,});
   const handleChangePage = (event, newPage) => {
     setFilter((prevFilter) => ({
       ...prevFilter,
@@ -70,7 +71,6 @@ export default function Index() {
   useEffect(() => {
     if (!(Object.keys(router.query).length === 0 && router.query.constructor === Object)) {
       const buildFilter = {
-        q: router.query.q,
         page: router.query.page || 1,
         brands: router.query.brands ? Array(0).concat(router.query.brands) : [],
         categories: router.query.categories ? Array(0).concat(router.query.categories) : [],
@@ -81,10 +81,12 @@ export default function Index() {
     }
   }, [router.query]);
 
+  const title = 'Pencarian ' + stringify(filter)
+
   return (
     <>
       <Head>
-        <title>{router.query.q + ' | Pencarian Produk Savan'}</title>
+        <title>{title} | Savan</title>
         <link rel="icon" href="/icon.svg"/>
       </Head>
       <NavigationAppBar givenFilter={filter}/>
