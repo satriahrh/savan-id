@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   navSearch: {
     textTransform: 'none',
     fontWeight: 400,
+    maxWidth: "100%"
   }
 }));
 
@@ -50,7 +51,7 @@ const CATEGORY = {
 };
 
 const SORT_BY = {
-  'popularity': 'Popularitas',
+  'popularity': 'Terpopuler',
   '-date': 'Terbaru',
   'date': 'Terlama',
   '-price': 'Termurah',
@@ -58,6 +59,7 @@ const SORT_BY = {
 };
 
 const DEFAULT_SORT_BY = 'popularity'
+const DEFAULT_TOGGLE_TEXT = 'Boleh kakak, mau cari apa?'
 
 export default function FilterDrawer({givenFilter}) {
   const classes = useStyles();
@@ -73,6 +75,8 @@ export default function FilterDrawer({givenFilter}) {
     state: 0
   });
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [toggleText, setToggleText] = useState(DEFAULT_TOGGLE_TEXT);
+
   const handleDrawerToggle = () => {
     setDrawerIsOpen((prevState) => {
       return !prevState;
@@ -104,6 +108,30 @@ export default function FilterDrawer({givenFilter}) {
         query: filter
       }).then(() => console.log("yes"));
     }
+
+    let text = ""
+    filter.brands.forEach((value, index) => {
+      text += BRAND[value]
+      if (index < filter.brands.length - 1) {
+        text += ", "
+      }
+    })
+
+    if (filter.brands.length !== 0) {
+      text += " - "
+    }
+    filter.categories.forEach((value, index) => {
+      text += CATEGORY[value]
+      if (index < filter.categories.length - 1) {
+        text += ", "
+      }
+    })
+
+    if (filter.categories.length !== 0) {
+      text += " - "
+    }
+    text += SORT_BY[filter.sortBy]
+    setToggleText(text)
   }, [filter.state]);
 
   return (
@@ -112,8 +140,9 @@ export default function FilterDrawer({givenFilter}) {
         onClick={handleDrawerToggle}
         className={classes.navSearch}
         variant='outlined'
+        wrap
       >
-        <SearchIcon/>Boleh kakak, mau cari apa?
+        <SearchIcon/><Typography noWrap>{toggleText}</Typography>
       </Button>
       <SwipeableDrawer
         anchor='right'
