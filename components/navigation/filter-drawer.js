@@ -101,7 +101,6 @@ export default function FilterDrawer({givenFilter}) {
         onClick={handleDrawerToggle}
         className={classes.navSearch}
         variant='outlined'
-        wrap
       >
         <SearchIcon/><Typography noWrap>{toggleText}</Typography>
       </Button>

@@ -69,7 +69,9 @@ export default function Index() {
   }, [filter]);
 
   useEffect(() => {
-    if (!(Object.keys(router.query).length === 0 && router.query.constructor === Object)) {
+    console.log(router.query)
+    console.log(router.query.constructor)
+    if (router.query.constructor === Object) {
       const buildFilter = {
         page: router.query.page || 1,
         brands: router.query.brands ? Array(0).concat(router.query.brands) : [],

@@ -6,7 +6,7 @@ module.exports = {
       whatsapp: 'https://wa.me/621231232',
       instagram: 'https://instagram.com/satr',
       search: '/search',
-      savanBabyStoreSearchPromotedQuery: 'q=sleepsuit',
+      savanBabyStoreSearchPromotedQuery: '',
       infoPartnership: '/baby-store/kerja-sama',
       authorSite: 'https://satriahrh.github.io'
     },
