@@ -18,7 +18,7 @@ let db = firebase.firestore()
 db.useEmulator("localhost", 8080);
 
 let productsRef = db.collection("products")
-productsRef.doc('savan-jumper-solid').set({
+productsRef.doc('savan-0').set({
   name: "Jumper Solid",
   variants: {
     main: ['Putih', 'Polos', 'Strip', 'Strap'],

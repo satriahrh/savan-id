@@ -317,14 +317,17 @@ const styles = makeStyles((theme) => ({
 }));
 
 function getIdFromProductPath(productPath) {
-  return productPath ? productPath[1] : undefined
+  if (productPath?.length === undefined || productPath.length < 2) {
+    return undefined;
+  } else {
+    return productPath[0] + '-' + productPath[1];
+  }
 }
 
 async function getProduct(id) {
   const firebase = await firebaseInit();
   let db = firebase.firestore()
   db.useEmulator("localhost", 8080);
-  id = 'savan-jumper-solid';
   const doc = await db.collection('products').doc(id).get();
   if (doc.exists) {
     return doc.data();
