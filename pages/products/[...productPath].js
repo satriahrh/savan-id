@@ -54,7 +54,6 @@ export default function Index({data, error}) {
 export async function getServerSideProps({params}) {
   try {
     const productId = getIdFromProductPath(params.productPath);
-    console.log(productId);
     const product = await getProduct(productId);
     return {
       props: {
