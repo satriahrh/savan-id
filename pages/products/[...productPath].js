@@ -29,8 +29,9 @@ import NavigationAppBar from "../../components/navigation/app-bar";
 import {default as RelatedProductsCarousel} from "../../components/products/carousel";
 import {makeStyles} from "@material-ui/core/styles";
 import Footer from "../../components/navigation/footer";
-import firestore from "../../firebase/firestore.init";
 import Error from 'next/error'
+import getConfig from 'next/config';
+import firestore from '../../firebase/firestore';
 
 export default function Index({data, error}) {
   if (error || !data) {
