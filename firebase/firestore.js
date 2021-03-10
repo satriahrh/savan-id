@@ -29,14 +29,4 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-// try {
-//   process.env.NODE_ENV === 'development' ? firestore.useEmulator('localhost', 8080) : null;
-// } catch (err) {
-//   if (err.name == 'FirebaseError') {
-//     err.code !== 'failed-precondition' ? console.error(err) : null;
-//   } else {
-//     console.error(err);
-//   }
-// }
-
 export default firestore;
