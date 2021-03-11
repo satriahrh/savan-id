@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -12,6 +12,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "bootstrap": "^4.5.2",
+    "firebase": "8.2.4",
     "next": "9.5.3",
     "node-sass": "^4.14.1",
     "normalize.css": "^8.0.1",
@@ -21,5 +22,10 @@
   },
   "engines": {
     "node": "^12"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
