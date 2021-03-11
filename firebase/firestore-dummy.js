@@ -1,23 +1,21 @@
 const firebase = require('firebase')
 require('firebase/firestore')
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCmxXgbawLs-ltxkZmuyv6Nh0_uuYcJtu4",
-  authDomain: "savan-id.firebaseapp.com",
-  databaseURL: "https://savan-id.firebaseio.com",
-  projectId: "savan-id",
-  storageBucket: "savan-id.appspot.com",
-  messagingSenderId: "469976157461",
-  appId: "1:469976157461:web:1d2dbd2c1bc32160ca6d1c",
-  measurementId: "G-NDNPF8BBR2"
-};
-// Initialize Firebase
+const firebaseConfigJson = process.env.FIREBASE_CONFIG_JSON;
+const firebaseConfig = JSON.parse(firebaseConfigJson);
 firebase.initializeApp(firebaseConfig);
 
-let db = firebase.firestore()
-db.useEmulator("localhost", 8080);
+const firestore = firebase.firestore();
+if (process.env.NODE_ENV === 'development') {
+  if(typeof window === 'undefined' || !window['_init']) {
+    firestore.useEmulator(process.env.FIRESTORE_EMULATOR_HOST, process.env.FIRESTORE_EMULATOR_PORT);
+    if(typeof window !== 'undefined') {
+      window['_init'] = true;
+    }
+  }
+}
 
-let productsRef = db.collection("products")
+let productsRef = firestore.collection("products")
 productsRef.doc('savan-0').set({
   name: "Jumper Solid",
   variants: {

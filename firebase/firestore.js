@@ -2,7 +2,6 @@ const firebase = require('firebase');
 if (!firebase.apps.length) {
   try {
     const firebaseConfigJson = process.env.FIREBASE_CONFIG_JSON;
-    console.log(firebaseConfigJson);
     const firebaseConfig = JSON.parse(firebaseConfigJson);
     
     firebase.initializeApp(firebaseConfig);
