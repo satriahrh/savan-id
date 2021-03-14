@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from '../components/navigation/footer';
 import Head from 'next/dist/next-server/lib/head';
 import NavigationAppBar from '../components/navigation/app-bar';
@@ -10,71 +11,38 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 import { stringify } from '../utils/search-filter';
 
-export default function Index() {
+Index.propTypes = {
+  filter: PropTypes.shape({
+    page: PropTypes.number,
+    sortBy: PropTypes.string,
+    brands: PropTypes.arrayOf(PropTypes.string),
+    categories: PropTypes.arrayOf(PropTypes.string)
+  }),
+  data: PropTypes.arrayOf(PropTypes.object),
+  error: PropTypes.object
+};
+export default function Index({ filter, data, error }) {
   const classes = styles();
   const router = useRouter();
-  Index.getInitialProps = ({ query }) => {
-    return { query };
-  };
 
-  const [filter, setFilter] = useState({
-    page: 1,
-    brands: [],
-    categories: [],
-    sortBy: 'popularity',
-    state: 0
-  });
   const handleChangePage = (event, newPage) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      page: newPage,
-      state: 1
-    }));
+    filter.page = newPage;
+    router.push({
+      query: filter
+    });
   };
-
-  const [getProductsResult, setGetProductsResult] = useState();
 
   let componentPagination;
-  let componentProducts;
-  if (getProductsResult) {
-    componentProducts = getProductsResult.products.map((product, i) => (
-      <Grid key={i} item xs={6} sm={4} md={3}>
-        <Item product={product} />
-      </Grid>
-    ));
-    componentPagination = (
-      <Container className={classes.paginationRoot}>
-        <Pagination
-          count={getProductsResult.page.total}
-          page={getProductsResult.page.current}
-          onChange={handleChangePage}
-        />
-      </Container>
-    );
-  }
-
-  useEffect(() => {
-    if (filter.state === 2) {
-      getProducts(filter).then((result) => {
-        setGetProductsResult(result.data);
-      });
-    }
-  }, [filter]);
-
-  useEffect(() => {
-    console.log(router.query);
-    console.log(router.query.constructor);
-    if (router.query.constructor === Object) {
-      const buildFilter = {
-        page: router.query.page || 1,
-        brands: router.query.brands ? Array(0).concat(router.query.brands) : [],
-        categories: router.query.categories ? Array(0).concat(router.query.categories) : [],
-        sortBy: router.query.sortBy ? router.query.sortBy : 'popularity',
-        state: 2
-      };
-      setFilter(buildFilter);
-    }
-  }, [router.query]);
+  let componentProducts = data.products.map((product, i) => (
+    <Grid key={i} item xs={6} sm={4} md={3}>
+      <Item product={product} />
+    </Grid>
+  ));
+  componentPagination = (
+    <Container className={classes.paginationRoot}>
+      <Pagination count={data.page.total} page={data.page.current} onChange={handleChangePage} />
+    </Container>
+  );
 
   const title = 'Pencarian ' + stringify(filter);
 
@@ -94,6 +62,22 @@ export default function Index() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ query }) {
+  const filter = {
+    page: query.page ? query.page : 1,
+    sortBy: query.sortBy ? query.sortBy : 'popularity',
+    brands: query.brands ? query.brands : [],
+    categories: query.categories ? query.categories : []
+  };
+  let result = await getProducts(filter);
+  return {
+    props: {
+      data: result.data,
+      filter: filter
+    }
+  };
 }
 
 const styles = makeStyles((theme) => ({
