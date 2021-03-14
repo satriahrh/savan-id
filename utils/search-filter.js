@@ -1,45 +1,53 @@
-export function stringify(filter) {
-  let text = "Produk "
+function stringify(filter) {
+  let text = 'Produk ';
   filter.brands.forEach((value, index) => {
-    text += BRAND[value]
+    text += BRAND[value];
     if (index < filter.brands.length - 1) {
-      text += ", "
+      text += ', ';
     }
-  })
+  });
 
   if (filter.brands.length !== 0) {
-    text += " - "
+    text += ' - ';
   }
   filter.categories.forEach((value, index) => {
-    text += CATEGORY[value]
+    text += CATEGORY[value];
     if (index < filter.categories.length - 1) {
-      text += ", "
+      text += ', ';
     }
-  })
+  });
 
   if (filter.categories.length !== 0) {
-    text += " - "
+    text += ' - ';
   }
-  text += SORT_BY[filter.sortBy]
-  return text
+  text += SORT_BY[filter.sortBy];
+  return text;
 }
 
-export const BRAND = {
-  'fluffy': 'Fluffy Baby Wear',
+const BRAND = {
+  savan: 'Savan Baby Wear',
+  fluffy: 'Fluffy Baby Wear',
   'little-palmerhaus': 'Little Palmerhaus',
-  'kacakids': 'Kaca Kids'
+  kacakids: 'Kaca Kids'
 };
 
-export const CATEGORY = {
-  'setelan': 'Setelan',
-  'sleepsuit': 'Sleepsuit',
-  'jumper': 'Jumper',
+const CATEGORY = {
+  setelan: 'Setelan',
+  sleepsuit: 'Sleepsuit',
+  jumper: 'Jumper'
 };
 
-export const SORT_BY = {
-  'popularity': 'Terpopuler',
+const SORT_BY = {
+  popularity: 'Terpopuler',
   '-date': 'Terbaru',
-  'date': 'Terlama',
+  date: 'Terlama',
   '-price': 'Termurah',
-  'price': 'Termahal',
+  price: 'Termahal'
+};
+
+module.exports = {
+  stringify,
+  BRAND,
+  CATEGORY,
+  SORT_BY
 };

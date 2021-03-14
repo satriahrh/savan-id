@@ -1,113 +1,89 @@
-import Footer from "../components/navigation/footer";
-import Head from "next/dist/next-server/lib/head";
-import NavigationAppBar from "../components/navigation/app-bar";
-import {useRouter} from "next/router";
-import {
-  Button,
-  Container,
-  Hidden,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Select,
-  Grid,
-  Input,
-  Typography,
-} from "@material-ui/core";
-import {
-  Pagination
-} from "@material-ui/lab";
-import Item from "../components/products/item";
-import {makeStyles} from "@material-ui/core/styles";
-import {useEffect, useState} from "react";
-import TuneIcon from '@material-ui/icons/Tune';
-import getConfig from "next/dist/next-server/lib/runtime-config";
-import {stringify} from "../utils/search-filter";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Footer from '../components/navigation/footer';
+import Head from 'next/dist/next-server/lib/head';
+import NavigationAppBar from '../components/navigation/app-bar';
+import { useRouter } from 'next/router';
+import { Container, Grid } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import Item from '../components/products/item';
+import { makeStyles } from '@material-ui/core/styles';
+import { useEffect, useState } from 'react';
+import { stringify } from '../utils/search-filter';
+import firestore from './../firebase/firestore';
 
-export default function Index() {
+Index.propTypes = {
+  filter: PropTypes.shape({
+    page: PropTypes.number,
+    sortBy: PropTypes.string,
+    brands: PropTypes.arrayOf(PropTypes.string),
+    categories: PropTypes.arrayOf(PropTypes.string)
+  }),
+  data: PropTypes.arrayOf(PropTypes.object),
+  error: PropTypes.object
+};
+export default function Index({ filter, data, error }) {
   const classes = styles();
   const router = useRouter();
-  Index.getInitialProps = ({query}) => {
-    return {query}
-  };
-  const {publicRuntimeConfig} = getConfig();
-  const [filter, setFilter] = useState({page: 1, brands: [], categories: [], sortBy: 'popularity', state: 0,});
+
   const handleChangePage = (event, newPage) => {
-    setFilter((prevFilter) => ({
-      ...prevFilter,
-      page: newPage,
-      state: 1,
-    }))
+    // TODO https://ellismin.com/2020/05/next-pagination/
+    filter.page = newPage;
+    router.push({
+      query: filter
+    });
   };
 
-  const [getProductsResult, setGetProductsResult] = useState();
+  let componentProducts = data.map((product, i) => (
+    <Grid key={i} item xs={6} sm={4} md={3}>
+      <Item product={product} />
+    </Grid>
+  ));
+  // let componentPagination = (
+  //   <Container className={classes.paginationRoot}>
+  //     <Pagination count={data.page.total} page={data.page.current} onChange={handleChangePage} />
+  //   </Container>
+  // );
 
-  let componentPagination;
-  let componentProducts;
-  if (getProductsResult) {
-    componentProducts = getProductsResult.products.map((product, i) => (
-      <Grid key={i} item xs={6} sm={4} md={3}>
-        <Item product={product}/>
-      </Grid>
-    ));
-    componentPagination = (
-      <Container className={classes.paginationRoot}>
-        <Pagination count={getProductsResult.page.total}
-                    page={getProductsResult.page.current}
-                    onChange={handleChangePage}
-        />
-      </Container>
-    )
-  }
-
-  useEffect(() => {
-    if (filter.state === 2) {
-      getProducts(filter).then((result) => {
-        setGetProductsResult(result.data)
-      })
-    }
-  }, [filter]);
-
-  useEffect(() => {
-    console.log(router.query)
-    console.log(router.query.constructor)
-    if (router.query.constructor === Object) {
-      const buildFilter = {
-        page: router.query.page || 1,
-        brands: router.query.brands ? Array(0).concat(router.query.brands) : [],
-        categories: router.query.categories ? Array(0).concat(router.query.categories) : [],
-        sortBy: router.query.sortBy ? router.query.sortBy : 'popularity',
-        state: 2
-      };
-      setFilter(buildFilter);
-    }
-  }, [router.query]);
-
-  const title = 'Pencarian ' + stringify(filter)
+  const title = 'Pencarian ' + stringify(filter);
 
   return (
     <>
       <Head>
         <title>{title} | Savan</title>
-        <link rel="icon" href="/icon.svg"/>
+        <link rel="icon" href="/icon.svg" />
       </Head>
-      <NavigationAppBar givenFilter={filter}/>
-      <Container className={classes.searchResultRoot}><Grid
-        container
-        alignItems='flex-start'
-        alignContent='flex-start'
-      >
-        {componentProducts}
-      </Grid></Container>
-      {componentPagination}
-      <Footer/>
+      <NavigationAppBar givenFilter={filter} />
+      <Container className={classes.searchResultRoot}>
+        <Grid container alignItems="flex-start" alignContent="flex-start">
+          {componentProducts}
+        </Grid>
+      </Container>
+      {/* {componentPagination} */}
+      <Footer />
     </>
-  )
+  );
+}
+
+export async function getServerSideProps({ query }) {
+  const filter = {
+    page: query.page ? query.page : 1,
+    sortBy: query.sortBy ? query.sortBy : 'popularity',
+    brands: query.brands ? query.brands : [],
+    categories: query.categories ? query.categories : []
+  };
+  let data = await getProducts(filter);
+  return {
+    props: {
+      data: data,
+      filter: filter
+    }
+  };
 }
 
 const styles = makeStyles((theme) => ({
   searchResultRoot: {
-    minHeight: '100vh',
+    minHeight: '100vh'
   },
   filterRoot: {
     marginTop: theme.spacing(2)
@@ -117,11 +93,10 @@ const styles = makeStyles((theme) => ({
   },
   formControlBaseRoot: {
     display: 'block',
-    padding: theme.spacing(2),
-
+    padding: theme.spacing(2)
   },
   formControlBaseSelectRoot: {
-    width: '100%',
+    width: '100%'
   },
   filterButton: {
     margin: theme.spacing(1)
@@ -129,20 +104,29 @@ const styles = makeStyles((theme) => ({
   paginationRoot: {
     marginTop: theme.spacing(2),
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 }));
 
-async function getProducts({brands, categories, sortBy, page}) {
-  return {
-    data: {
-      products: products.slice((page-1)*20, ((page-1)*20)+20),
-      page: {
-        current: parseInt(page),
-        total: 19,
-      },
-    },
+async function getProducts({ brands, categories, sortBy, page }) {
+  console.log(brands, categories, sortBy, page);
+  let productsRef = firestore.collection('products');
+  if (brands.length > 0) {
+    productsRef = productsRef.where('brand', 'in', brands);
   }
+  if (categories.length > 0) {
+    productsRef = productsRef.where('categoy', 'in', categories);
+  }
+  const productsDoc = await productsRef.get();
+
+  let productsData = [];
+  productsDoc.forEach((productDoc) => {
+    productsData.push({
+      id: productDoc.id,
+      ...productDoc.data()
+    });
+  });
+  return productsData;
 }
 
 const products = [
@@ -189,16 +173,6 @@ const products = [
   'Baju Oblong Bis Abu',
   'Jumper Kutung Abu',
   'Jumper Pendek Abu',
-  'Jumper Nahkoda Abu','Sleep Suit Abu',
-  'Celana Panjang Rib Abu',
-  'Celana Panjang Pop Abu',
-  'Celana Pendek Pop Abu',
-  'Celana Segitiga Pop Abu',
-  'Baju Oblong Pop Abu',
-  'Baju Oblong Pendek Abu',
-  'Baju Oblong Bis Abu',
-  'Jumper Kutung Abu',
-  'Jumper Pendek Abu',
   'Jumper Nahkoda Abu',
   'Sleep Suit Abu',
   'Celana Panjang Rib Abu',
@@ -233,32 +207,43 @@ const products = [
   'Jumper Kutung Abu',
   'Jumper Pendek Abu',
   'Jumper Nahkoda Abu',
-].map((name, i) => (
-  {
-    id: i,
-    slug: `sleep-suit-abu`,
-    name: `${i} ${name}`,
-    sizes: ['s', 'm'],
-    brand: {
-      code: 'savan',
-      name: 'Savan',
-      color: '#FFD770',
+  'Sleep Suit Abu',
+  'Celana Panjang Rib Abu',
+  'Celana Panjang Pop Abu',
+  'Celana Pendek Pop Abu',
+  'Celana Segitiga Pop Abu',
+  'Baju Oblong Pop Abu',
+  'Baju Oblong Pendek Abu',
+  'Baju Oblong Bis Abu',
+  'Jumper Kutung Abu',
+  'Jumper Pendek Abu',
+  'Jumper Nahkoda Abu'
+].map((name, i) => ({
+  id: i,
+  slug: `sleep-suit-abu`,
+  name: `${i} ${name}`,
+  sizes: ['s', 'm'],
+  brand: {
+    code: 'savan',
+    name: 'Savan',
+    color: '#FFD770'
+  },
+  price: 21300,
+  thumbnailUrl: `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=${name}`,
+  variants: {
+    Putih: {
+      sampleColorIcoUrl: 'http://google.com/a.jpg',
+      sampleUrl: 'http://google.com/a.jpg'
     },
-    price: 21300,
-    thumbnailUrl: `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=${name}`,
-    variants: {
-      Putih: {
-        sampleColorIcoUrl: 'http://google.com/a.jpg',
-        sampleUrl: 'http://google.com/a.jpg',
-      },
-      Polos: {
-        sampleColorIcoUrl: 'http://google.com/a.jpg',
-        sampleUrl: 'http://google.com/a.jpg',
-      },
-    },
-    shopeeUrlSizes: {
-      s: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
-      m: 'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490'
+    Polos: {
+      sampleColorIcoUrl: 'http://google.com/a.jpg',
+      sampleUrl: 'http://google.com/a.jpg'
     }
+  },
+  shopeeUrlSizes: {
+    s:
+      'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490',
+    m:
+      'https://shopee.co.id/Fluffy-OJS-Baju-Panjang-Oblong-Rib-untuk-Anak-Bayi-Usia-6-12-bulan-1-pcs-i.277931002.5440958490'
   }
-));
+}));
