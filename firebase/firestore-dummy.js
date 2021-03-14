@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const firebase = require('firebase');
 require('firebase/firestore');
 
@@ -36,7 +36,9 @@ Object.entries(BRAND).forEach((brand) => {
           brandColor: '#FFD770',
           price: 21300,
           photos: {
-            thumbnails: [`https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=Jumper Nahkoda Abu`],
+            thumbnails: [
+              `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=Jumper Nahkoda Abu`
+            ],
             main: [
               'https://via.placeholder.com/600x600/FFFFFF/8f8e94?text=FotoUtamaPolos',
               'https://via.placeholder.com/600x600/8f8e94/FFFFFF?text=FotoKedua'

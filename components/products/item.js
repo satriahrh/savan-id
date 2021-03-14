@@ -25,9 +25,9 @@ export default function Item({ product }) {
   const classes = styles();
   return (
     <Card className={classes.root} raised>
-      <Link href={`/products/${product.brand.code}/${product.id}/${product.slug}`} passHref>
+      <Link href={`/products/${product.id}/${product.slug}`} passHref>
         <CardActionArea>
-          <CardMedia component="img" image={product.thumbnailUrl} title="Sleep Suit" />
+          <CardMedia component="img" image={product.photos.thumbnails[0]} title="Sleep Suit" />
           <CardContent>
             <Typography className={classes.contentName} variant="subtitle1">
               {product.name}
@@ -37,9 +37,9 @@ export default function Item({ product }) {
             </Typography>
             <div className={classes.contentTag}>
               <Chip
-                label={product.brand.name}
+                label={product.brandName}
                 size="small"
-                style={{ backgroundColor: product.brand.color }}
+                style={{ backgroundColor: product.brandColor }}
               />
             </div>
           </CardContent>

@@ -10,6 +10,7 @@ import Item from '../components/products/item';
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 import { stringify } from '../utils/search-filter';
+import firestore from './../firebase/firestore';
 
 Index.propTypes = {
   filter: PropTypes.shape({
@@ -26,23 +27,23 @@ export default function Index({ filter, data, error }) {
   const router = useRouter();
 
   const handleChangePage = (event, newPage) => {
+    // TODO https://ellismin.com/2020/05/next-pagination/
     filter.page = newPage;
     router.push({
       query: filter
     });
   };
 
-  let componentPagination;
-  let componentProducts = data.products.map((product, i) => (
+  let componentProducts = data.map((product, i) => (
     <Grid key={i} item xs={6} sm={4} md={3}>
       <Item product={product} />
     </Grid>
   ));
-  componentPagination = (
-    <Container className={classes.paginationRoot}>
-      <Pagination count={data.page.total} page={data.page.current} onChange={handleChangePage} />
-    </Container>
-  );
+  // let componentPagination = (
+  //   <Container className={classes.paginationRoot}>
+  //     <Pagination count={data.page.total} page={data.page.current} onChange={handleChangePage} />
+  //   </Container>
+  // );
 
   const title = 'Pencarian ' + stringify(filter);
 
@@ -58,7 +59,7 @@ export default function Index({ filter, data, error }) {
           {componentProducts}
         </Grid>
       </Container>
-      {componentPagination}
+      {/* {componentPagination} */}
       <Footer />
     </>
   );
@@ -71,10 +72,10 @@ export async function getServerSideProps({ query }) {
     brands: query.brands ? query.brands : [],
     categories: query.categories ? query.categories : []
   };
-  let result = await getProducts(filter);
+  let data = await getProducts(filter);
   return {
     props: {
-      data: result.data,
+      data: data,
       filter: filter
     }
   };
@@ -109,15 +110,23 @@ const styles = makeStyles((theme) => ({
 
 async function getProducts({ brands, categories, sortBy, page }) {
   console.log(brands, categories, sortBy, page);
-  return {
-    data: {
-      products: products.slice((page - 1) * 20, (page - 1) * 20 + 20),
-      page: {
-        current: parseInt(page),
-        total: 19
-      }
-    }
-  };
+  let productsRef = firestore.collection('products');
+  if (brands.length > 0) {
+    productsRef = productsRef.where('brand', 'in', brands);
+  }
+  if (categories.length > 0) {
+    productsRef = productsRef.where('categoy', 'in', categories);
+  }
+  const productsDoc = await productsRef.get();
+
+  let productsData = [];
+  productsDoc.forEach((productDoc) => {
+    productsData.push({
+      id: productDoc.id,
+      ...productDoc.data()
+    });
+  });
+  return productsData;
 }
 
 const products = [

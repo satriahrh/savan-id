@@ -343,10 +343,10 @@ const styles = makeStyles((theme) => ({
 }));
 
 function getIdFromProductPath(productPath) {
-  if (productPath?.length === undefined || productPath.length < 2) {
+  if (productPath?.length === undefined || productPath.length < 1) {
     return undefined;
   } else {
-    return productPath[0] + '-' + productPath[1];
+    return productPath[0];
   }
 }
 
@@ -389,7 +389,9 @@ async function getRelatedProducts() {
       color: '#FFD770'
     },
     price: 21300,
-    thumbnailUrl: `https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=${name}`,
+    photos: {
+      thumbnails: [`https://via.placeholder.com/200x200/8f8e94/FFFFFF?text=${name}`]
+    },
     variants: {
       Putih: {
         sampleColorIcoUrl: 'http://google.com/a.jpg',
