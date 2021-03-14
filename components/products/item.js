@@ -1,11 +1,19 @@
-import Link from "next/link";
-import {Card, CardActionArea, CardMedia, CardContent, Chip, Divider, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import {useRouter} from "next/router";
+import Link from 'next/link';
+import {
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Chip,
+  Divider,
+  Typography
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
 const styles = makeStyles((theme) => ({
   root: {
-    margin: '16px',
+    margin: '16px'
   },
   contentName: {
     overflow: 'hidden',
@@ -17,36 +25,31 @@ const styles = makeStyles((theme) => ({
   }
 }));
 
-export default function Item({product}) {
+export default function Item({ product }) {
   const classes = styles();
   const router = useRouter();
   return (
-    <Card className={classes.root}
-          raised
-    >
+    <Card className={classes.root} raised>
       <Link href={`/products/${product.brand.code}/${product.id}/${product.slug}`} passHref>
-        <CardActionArea
-        >
-          <CardMedia
-            component='img'
-            image={product.thumbnailUrl}
-            title='Sleep Suit'
-          />
+        <CardActionArea>
+          <CardMedia component="img" image={product.thumbnailUrl} title="Sleep Suit" />
           <CardContent>
-            <Typography className={classes.contentName} variant='subtitle1'>
+            <Typography className={classes.contentName} variant="subtitle1">
               {product.name}
             </Typography>
-            <Typography><strong>Rp{product.price.toLocaleString()}</strong></Typography>
+            <Typography>
+              <strong>Rp{product.price.toLocaleString()}</strong>
+            </Typography>
             <div className={classes.contentTag}>
-              <Chip label={product.brand.name} size='small'
-                    style={{backgroundColor: product.brand.color}}
+              <Chip
+                label={product.brand.name}
+                size="small"
+                style={{ backgroundColor: product.brand.color }}
               />
             </div>
-
           </CardContent>
         </CardActionArea>
       </Link>
-
     </Card>
-  )
+  );
 }
