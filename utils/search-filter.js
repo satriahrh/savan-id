@@ -1,4 +1,4 @@
-export function stringify(filter) {
+function stringify(filter) {
   let text = 'Produk ';
   filter.brands.forEach((value, index) => {
     text += BRAND[value];
@@ -24,22 +24,30 @@ export function stringify(filter) {
   return text;
 }
 
-export const BRAND = {
+const BRAND = {
+  savan: 'Savan Baby Wear',
   fluffy: 'Fluffy Baby Wear',
   'little-palmerhaus': 'Little Palmerhaus',
   kacakids: 'Kaca Kids'
 };
 
-export const CATEGORY = {
+const CATEGORY = {
   setelan: 'Setelan',
   sleepsuit: 'Sleepsuit',
   jumper: 'Jumper'
 };
 
-export const SORT_BY = {
+const SORT_BY = {
   popularity: 'Terpopuler',
   '-date': 'Terbaru',
   date: 'Terlama',
   '-price': 'Termurah',
   price: 'Termahal'
+};
+
+module.exports = {
+  stringify,
+  BRAND,
+  CATEGORY,
+  SORT_BY
 };
