@@ -31,6 +31,7 @@ Object.entries(BRAND).forEach((brand) => {
             secondary: ['NB', '3-6m', '6-9m', '9-12m', '1y', '2y', '3y']
           },
           category: category[0],
+          brand: brand[0],
           brandName: brand[1],
           brandColor: '#FFD770',
           price: 21300,

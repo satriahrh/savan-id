@@ -1,4 +1,5 @@
 const firebase = require('firebase');
+require('firebase/firestore');
 if (!firebase.apps.length) {
   try {
     const firebaseConfigJson = process.env.FIREBASE_CONFIG_JSON;
