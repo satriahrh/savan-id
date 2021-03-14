@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Footer from '../components/navigation/footer';
 import NavigationAppBar from '../components/navigation/app-bar';
@@ -132,7 +134,7 @@ function Heading() {
         </ButtonGroup>
       </Grid>
       <Grid item xs={12} sm={12} md={6} container justify="flex-start" alignContent="flex-start">
-        <img src="/baby-index-ilustration.png" height="100%" width="100%" />
+        <img src="/baby-index-ilustration.png" height="100%" width="100%" alt="baby ilustration" />
       </Grid>
     </Grid>
   );
@@ -236,6 +238,9 @@ function retrieveImages(isMobile) {
   ));
 }
 
+TextStrong.propTypes = {
+  children: PropTypes.object.isRequired
+};
 function TextStrong({ children }) {
   const theme = useTheme();
   return (

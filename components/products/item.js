@@ -1,17 +1,10 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
-import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Chip,
-  Divider,
-  Typography
-} from '@material-ui/core';
+import { Card, CardActionArea, CardMedia, CardContent, Chip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRouter } from 'next/router';
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles(() => ({
   root: {
     margin: '16px'
   },
@@ -25,9 +18,11 @@ const styles = makeStyles((theme) => ({
   }
 }));
 
+Item.propTypes = {
+  product: PropTypes.object
+};
 export default function Item({ product }) {
   const classes = styles();
-  const router = useRouter();
   return (
     <Card className={classes.root} raised>
       <Link href={`/products/${product.brand.code}/${product.id}/${product.slug}`} passHref>

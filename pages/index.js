@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import {
@@ -7,15 +8,12 @@ import {
   Container,
   Divider,
   Grid,
-  Typography,
-  useMediaQuery,
-  useTheme
+  Typography
 } from '@material-ui/core';
 import SavanLogoIcon from '../components/icons/savan-logo-icon';
 
 import { makeStyles } from '@material-ui/core/styles';
 import getConfig from 'next/dist/next-server/lib/runtime-config';
-import { useRouter } from 'next/router';
 
 export default function Home() {
   return (
@@ -59,7 +57,6 @@ function SiteCarousel() {
       margin: theme.spacing(2)
     }
   }))();
-  const router = useRouter();
   const { publicRuntimeConfig } = getConfig();
 
   return (

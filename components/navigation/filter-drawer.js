@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Collapse from '@material-ui/core/Collapse';
@@ -39,9 +40,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DEFAULT_SORT_BY = 'popularity';
 const DEFAULT_TOGGLE_TEXT = 'Boleh kakak, mau cari apa?';
 
+FilterDrawer.propTypes = {
+  givenFilter: PropTypes.object
+};
 export default function FilterDrawer({ givenFilter }) {
   const classes = useStyles();
   const { publicRuntimeConfig } = getConfig();
@@ -150,6 +153,13 @@ export default function FilterDrawer({ givenFilter }) {
   );
 }
 
+ListOfCheckbox.propTypes = {
+  title: PropTypes.string,
+  selections: PropTypes.object,
+  filter: PropTypes.object,
+  setFilter: PropTypes.func,
+  filterKey: PropTypes.string
+};
 function ListOfCheckbox({ title, selections, filter, setFilter, filterKey }) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
@@ -208,6 +218,13 @@ function ListOfCheckbox({ title, selections, filter, setFilter, filterKey }) {
   );
 }
 
+ListOfRadio.propTypes = {
+  title: PropTypes.string,
+  selections: PropTypes.object,
+  filter: PropTypes.object,
+  setFilter: PropTypes.func,
+  filterKey: PropTypes.string
+};
 function ListOfRadio({ title, selections, filter, setFilter, filterKey }) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);

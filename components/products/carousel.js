@@ -1,7 +1,12 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { default as Base } from 'react-multi-carousel';
 import { useMediaQuery, useTheme } from '@material-ui/core';
 import Item from './item';
 
+Carousel.propTypes = {
+  products: PropTypes.object
+};
 export default function Carousel({ products }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,7 +38,7 @@ export default function Carousel({ products }) {
       responsive={responsive}
       transitionDuration={100}
       arrows={!isMobile}>
-      {products.map((product, i) => (
+      {products.map((product) => (
         <Item key={product.id} product={product} />
       ))}
     </Base>

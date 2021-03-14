@@ -1,25 +1,13 @@
+import React from 'react';
 import Footer from '../components/navigation/footer';
 import Head from 'next/dist/next-server/lib/head';
 import NavigationAppBar from '../components/navigation/app-bar';
 import { useRouter } from 'next/router';
-import {
-  Button,
-  Container,
-  Hidden,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Select,
-  Grid,
-  Input,
-  Typography
-} from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import Item from '../components/products/item';
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
-import TuneIcon from '@material-ui/icons/Tune';
-import getConfig from 'next/dist/next-server/lib/runtime-config';
 import { stringify } from '../utils/search-filter';
 
 export default function Index() {
@@ -28,7 +16,7 @@ export default function Index() {
   Index.getInitialProps = ({ query }) => {
     return { query };
   };
-  const { publicRuntimeConfig } = getConfig();
+
   const [filter, setFilter] = useState({
     page: 1,
     brands: [],
@@ -136,6 +124,7 @@ const styles = makeStyles((theme) => ({
 }));
 
 async function getProducts({ brands, categories, sortBy, page }) {
+  console.log(brands, categories, sortBy, page);
   return {
     data: {
       products: products.slice((page - 1) * 20, (page - 1) * 20 + 20),

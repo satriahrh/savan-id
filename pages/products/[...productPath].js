@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import {
   Accordion,
@@ -6,11 +8,8 @@ import {
   Button,
   Container,
   Divider,
-  FormControlLabel,
   Grid,
   Hidden,
-  RadioGroup,
-  Radio,
   Snackbar,
   Typography,
   useMediaQuery,
@@ -65,6 +64,9 @@ export default function Index() {
   );
 }
 
+ProductDetail.propTypes = {
+  productDetail: PropTypes.object
+};
 function ProductDetail({ productDetail }) {
   const classes = styles();
   const theme = useTheme();
@@ -87,7 +89,7 @@ function ProductDetail({ productDetail }) {
       message: message
     });
   };
-  const handleSnackbarClose = (event, reason) => {
+  const handleSnackbarClose = () => {
     setSnackbarData({
       open: false,
       message: ''
@@ -172,6 +174,9 @@ function ProductDetail({ productDetail }) {
   );
 }
 
+ProductCarousel.propTypes = {
+  photos: PropTypes.arrayOf(PropTypes.string)
+};
 function ProductCarousel({ photos }) {
   const theme = useTheme();
   return (
@@ -197,11 +202,17 @@ function ProductCarousel({ photos }) {
   );
 }
 
+Price.propTypes = {
+  price: PropTypes.number
+};
 function Price({ price }) {
   const classes = styles();
   return <span className={classes.detailPrice}>Rp{price.toLocaleString()}</span>;
 }
 
+Description.propTypes = {
+  descriptions: PropTypes.arrayOf(PropTypes.object)
+};
 function Description({ descriptions }) {
   const classes = styles();
   const [expanded, setExpanded] = useState(descriptions[0].summary);
@@ -227,6 +238,9 @@ function Description({ descriptions }) {
   );
 }
 
+RelatedProducts.propTypes = {
+  productId: PropTypes.string
+};
 function RelatedProducts({ productId }) {
   const classes = styles();
   const [relatedProduct, setRelatedProduct] = useState({ loading: true });
@@ -411,7 +425,7 @@ async function getProduct(id) {
   };
 }
 
-async function getRelatedProducts(id) {
+async function getRelatedProducts() {
   return [
     'Sleep Suit Abu',
     'Celana Panjang Rib Abu',

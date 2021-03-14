@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   AppBar,
   Button,
@@ -9,7 +11,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import React from 'react';
 import Link from 'next/link';
 import SavanLogoIcon from '../icons/savan-logo-icon';
 import FilterDrawer from './filter-drawer';
@@ -39,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+NavigationAppBar.propTypes = {
+  givenFilter: PropTypes.object
+};
 export default function NavigationAppBar({ givenFilter }) {
   const theme = useTheme();
   NavigationAppBar.getInitialProps = ({ query }) => {

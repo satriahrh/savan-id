@@ -1,9 +1,10 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import 'normalize.css/normalize.css';
 import '../styles/globals.scss';
 import 'react-multi-carousel/lib/styles.css';
 
 import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 
@@ -18,6 +19,10 @@ const theme = createMuiTheme({
   }
 });
 
+MyApp.propTypes = {
+  Component: PropTypes.elementType,
+  pageProps: PropTypes.object
+};
 function MyApp({ Component, pageProps }) {
   return (
     <React.Fragment>
